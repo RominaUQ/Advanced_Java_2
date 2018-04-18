@@ -215,7 +215,7 @@ public class MiniNet {
 									"this profile doesn't exists. You can only connect the prfoles exisiting in the network");
 						}
 					} else {
-						System.out.println("A two year or younger can not have any friends");
+						System.out.println("A two year or younger can not add any friends");
 					}
 				}
 

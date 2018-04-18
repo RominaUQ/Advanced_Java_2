@@ -9,7 +9,8 @@ public class Dependent extends Profile {
 	Profile _parent1;
 	Profile _parent2;
 	int age;
-
+	Set<Dependent> _classmate = new HashSet<>();
+	
 	public Dependent(String firstname, String famname, String status, int age, Profile MumParent, Profile DadParent) {
 		super(firstname, famname, status, age);
 		this._parent1 = MumParent;
@@ -27,10 +28,10 @@ public class Dependent extends Profile {
 			return true;
 		}
 
-		if (profile.getage() <= 2 && this.getage() <= 2) {
-			System.out.println("Younger than two year old, can not have any friend");
-			return false;
-		}
+		//if (profile.getage() <= 2 && this.getage() <= 2) {
+			//System.out.println("Younger than two year old, can not have any friend");
+			//return false;
+		//}
 
 		/// to maintain the age difference condition
 
@@ -70,4 +71,28 @@ public class Dependent extends Profile {
 	public String getDadfamname() {
 		return _parent2.getsurname();
 	}
-}
+
+	public void setclassmate(Set<Dependent> classmate) {
+		_classmate = classmate;
+	}
+	
+	
+	
+	public void addClassmate (Dependent Dependent1, Dependent Dependent2) {
+		if (Dependent1.getstatus()== Dependent2.getstatus()) {
+		_classmate.add(Dependent1);
+		_classmate.add(Dependent2);
+		} 
+	}	
+		public Set<Dependent> getclassmate() {
+			return _classmate;
+		
+		}
+	}
+
+
+
+
+
+
+

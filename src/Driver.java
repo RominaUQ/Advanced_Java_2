@@ -16,7 +16,7 @@ public class Driver {
 		Profile prof4 = new Profile("Lisa", "Chan", "nurse at royal hospital", 26);
 		Dependent dependent = new Dependent("Honey", "Brown", "Hi!I am baby", 13, prof1, prof2);
 		Dependent dependent2 = new Dependent("Sugar", "Brown", "Weeee", 6, prof1, prof2);
-		Dependent dependent3 = new Dependent("Bee", "Smith", "AWwwww", 2, prof4, prof3);
+		Dependent YoungChild1 = new YoungChild("Bee", "Smith", "AWwwww", 2, prof4, prof3);
 
 		AddFriend(prof1, prof2);
 		AddFriend(prof3, prof1);
@@ -28,7 +28,7 @@ public class Driver {
 		_profiles.add(prof4);
 		_profiles.add(dependent);
 		_profiles.add(dependent2);
-		_profiles.add(dependent3);
+		_profiles.add(YoungChild1);
 	}
 
 ///create a profile method
