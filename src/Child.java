@@ -1,3 +1,4 @@
+
 ////Author: Aleksey Savran
 
 import java.util.HashSet;
@@ -5,13 +6,13 @@ import java.util.Set;
 
 ////Dependent class inherits the profile and is used specifically for child objects
 
-public class Dependent extends Profile {
+public class Child extends Profile {
 	Profile _parent1;
 	Profile _parent2;
 	int age;
-	Set<Dependent> _classmate = new HashSet<>();
-	
-	public Dependent(String firstname, String famname, String status, int age, Profile MumParent, Profile DadParent) {
+	Set<Child> _classmate = new HashSet<>();
+
+	public Child(String firstname, String famname, String status, int age, Profile MumParent, Profile DadParent) {
 		super(firstname, famname, status, age);
 		this._parent1 = MumParent;
 		this._parent2 = DadParent;
@@ -28,10 +29,10 @@ public class Dependent extends Profile {
 			return true;
 		}
 
-		//if (profile.getage() <= 2 && this.getage() <= 2) {
-			//System.out.println("Younger than two year old, can not have any friend");
-			//return false;
-		//}
+		// if (profile.getage() <= 2 && this.getage() <= 2) {
+		// System.out.println("Younger than two year old, can not have any friend");
+		// return false;
+		// }
 
 		/// to maintain the age difference condition
 
@@ -72,27 +73,19 @@ public class Dependent extends Profile {
 		return _parent2.getsurname();
 	}
 
-	public void setclassmate(Set<Dependent> classmate) {
+	public void setclassmate(Set<Child> classmate) {
 		_classmate = classmate;
 	}
-	
-	
-	
-	public void addClassmate (Dependent Dependent1, Dependent Dependent2) {
-		if (Dependent1.getstatus()== Dependent2.getstatus()) {
-		_classmate.add(Dependent1);
-		_classmate.add(Dependent2);
-		} 
-	}	
-		public Set<Dependent> getclassmate() {
-			return _classmate;
-		
+
+	public void addClassmate(Child Child) {
+		if (this.getstatus() == Child.getstatus() && !this._classmate.contains(Child)) {
+			_classmate.add(Child);
+			Child.addClassmate(this);
 		}
 	}
 
+	public Set<Child> getclassmate() {
+		return _classmate;
 
-
-
-
-
-
+	}
+}

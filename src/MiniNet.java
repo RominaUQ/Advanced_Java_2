@@ -270,7 +270,7 @@ public class MiniNet {
 					Set<Profile> relatives = driver.showRelatives(profile);
 					if (!relatives.isEmpty()) {
 						for (Profile relative : relatives) {
-							Boolean isChild = relative instanceof Dependent;
+							Boolean isChild = relative instanceof Child;
 							System.out.println((isChild ? "Child: " : "Parent: ") + relative.getname() + " "
 									+ relative.getsurname());
 						}

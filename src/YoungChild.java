@@ -1,5 +1,5 @@
 
-public class YoungChild extends Dependent {
+public class YoungChild extends Child {
 
 	public YoungChild(String firstname, String famname, String status, int age , Profile MumParent, Profile DadParent) {
 		super(firstname, famname, status, age, MumParent, DadParent);

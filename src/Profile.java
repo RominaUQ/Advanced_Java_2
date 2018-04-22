@@ -5,15 +5,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 ///Profile class represent the profile of all adults and superclass for other profile types such as dependents
-public class Profile {
+public abstract class Profile {
 	protected String _name;
 	protected String _surname;
 	protected String _status;
 	protected int _age;
 	protected Set<Profile> _friendlist = new HashSet<>();
-	protected Set<Dependent> _dependents = new HashSet<>();
+	
 
-	public Profile(String firstname, String famname, String status, int age) {
+	public Profile (String firstname, String famname, String status, int age) {
 		this._name = firstname;
 		this._surname = famname;
 		this._status = status;
@@ -62,27 +62,11 @@ public class Profile {
 	}
 
 	/// add friend method, and to avoid child and adult connecting
-	public Boolean addfriend(Profile profile, Boolean isRelative) {
-		if (isRelative || !(profile instanceof Dependent)) {
-			_friendlist.add(profile);
-		} else {
-			System.out.println("An Adult is not allowed to add a Child");
-			return false;
-		}
-		return true;
-	}
+	public abstract Boolean addfriend(Profile profile, Boolean isRelative);
 
 	/// dependent and parent relationships, we're using a set to maintain the
 	/// dependents of a profile
-	public Set<Profile> getRelatives() {
-		Set<Profile> dependents = new HashSet<>();
-		for (Profile friend : _friendlist) {
-			if (friend instanceof Dependent) {
-				dependents.add((Dependent) friend);
-			}
-		}
-		return dependents;
-	}
+	public abstract Set<Profile> getRelatives();
 
 	public void removefriend(Profile profile) {
 		if (_friendlist.contains(profile)) {
@@ -90,6 +74,7 @@ public class Profile {
 		}
 	}
 
+	
 	@Override
 	public String toString() {
 		String profileString = "";
