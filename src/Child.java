@@ -2,28 +2,40 @@
 ////Author: Aleksey Savran
 
 import java.util.HashSet;
+import exceptions.*;
 import java.util.Set;
 
 ////Dependent class inherits the profile and is used specifically for child objects
 
 public class Child extends Profile {
-	Profile _parent1;
-	Profile _parent2;
+	Adult _parent1;
+	Adult _parent2;
 	int age;
 	Set<Child> _classmate = new HashSet<>();
 
-	public Child(String firstname, String famname, String status, int age, Profile MumParent, Profile DadParent) {
+	public Child(String firstname, String famname, String status, int age, Adult MumParent, Adult DadParent) throws Exception {
 		super(firstname, famname, status, age);
 		this._parent1 = MumParent;
 		this._parent2 = DadParent;
 
-		this._parent1.addfriend(this, true);
-		this._parent2.addfriend(this, true);
+		if (MumParent==null || DadParent==null||!MumParent.getSpouse().equals(DadParent)) { 
+			throw new NoParentException ("A Child can only be one couple dependent, including not only one parent");
+			
+		}
+		try {
+			this.addfriend(DadParent, true);
+			this.addfriend(MumParent, true);
+
+			this._parent1.addfriend(this, true);
+			this._parent2.addfriend(this, true);
+		} catch (Exception ex) {
+
+		}
 	}
 
 	//// overriding addfreind method from profile class in here
 	@Override
-	public Boolean addfriend(Profile profile, Boolean isRelative) {
+	public Boolean addfriend(Profile profile, Boolean isRelative) throws Exception {
 		if (isRelative) {
 			_friendlist.add(profile);
 			return true;
@@ -37,12 +49,12 @@ public class Child extends Profile {
 		/// to maintain the age difference condition
 
 		int agediff = Math.abs(this.getage() - profile.getage());
-		if (profile.getage() < 16 && agediff > 3) {
+		if (profile.getage() < 16 && agediff < 3) {
 			_friendlist.add(profile);
 		} else {
-			System.out.println("You are not allowed to add a friend more than 3 years older than yourself");
-			return false;
-		}
+			throw new NotToBeFriendsException (
+			"You are not allowed to add a friend more than 3 years older than yourself");
+					}
 		return true;
 	}
 

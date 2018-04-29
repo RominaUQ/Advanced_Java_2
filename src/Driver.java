@@ -1,4 +1,4 @@
-
+import exceptions.*;
 ////Author: Aleksey Savran
 import java.math.*;
 import java.util.HashSet;
@@ -11,33 +11,51 @@ public class Driver {
 
 	//// add some object for building the network
 	public Driver() {
-		Profile prof1 = new Adult("Romina", "Sharif", "Working at Deloitte", 21);
-		Profile prof2 = new Adult("Nicholas", "Brown", "Working at RMIT", 35);
-		Profile prof3 = new Adult("John", "Smith", "<3", 29);
-		Profile prof4 = new Adult("Lisa", "Chan", "nurse at royal hospital", 26);
-		Child child = new Child("Honey", "Brown", "Hi!I am baby", 13, prof1, prof2);
-		Child dependent2 = new Child("Sugar", "Brown", "Weeee", 6, prof1, prof2);
-		Child YoungChild1 = new YoungChild("Bee", "Smith", "AWwwww", 2, prof4, prof3);
+		try {
+			Adult prof1 = new Adult("Romina", "Sharif", "Working at Deloitte", 21);
+			Adult prof2 = new Adult("Nicholas", "Brown", "Working at RMIT", 35);
+			Adult prof3 = new Adult("John", "Smith", "<3", 29);
+			Adult prof4 = new Adult("Lisa", "Chan", "nurse at royal hospital", 26);
+			Adult prof5 = new Adult("Lola", "Gray", "nurse at royal hospital", 24);
+			
+			prof1.marry(prof2);
+			prof2.marry(prof1);
+			
+			Child child1 = new Child("Honey", "Brown", "Hi!I am baby", 13, prof1, prof2);
+			Child child2 = new Child("Sugar", "Brown", "Weeee", 6, prof1, prof2);
+			Child child3 = new Child("Rose", "Daw", "Hi!I am baby", 15, prof3, prof4);
+			Child YoungChild1 = new YoungChild("Bee", "Smith", "AWwwww", 2, prof4, prof3);
 
-		AddFriend(prof1, prof2);
-		AddFriend(prof3, prof1);
-		AddFriend(child, dependent2);
+			AddFriend(prof1, prof2);
+			AddFriend(prof3, prof1);
+			AddFriend(child1, child2);
+			AddFriend(prof4, prof5);
+			AddFriend(child1, child3);
+		
+			_profiles.add(prof1);
+			_profiles.add(prof2);
+			_profiles.add(prof3);
+			_profiles.add(prof4);
+			_profiles.add(prof5);
+			_profiles.add(child1);
+			_profiles.add(child2);
+			_profiles.add(child3);
+			_profiles.add(YoungChild1);
+		
+		} catch (Exception ex) {
 
-		_profiles.add(prof1);
-		_profiles.add(prof2);
-		_profiles.add(prof3);
-		_profiles.add(prof4);
-		_profiles.add(child);
-		_profiles.add(dependent2);
-		_profiles.add(YoungChild1);
+		}
+		
 	}
 
+
 	/// create a profile method
-	public Boolean createProfile(String firstname, String famname, String status, int age) {
+	public Boolean createProfile(String firstname, String famname, String status, int age) throws Exception {
 		return createProfile(firstname, famname, status, age, null, null);
 	}
 
-	public Boolean createProfile(String firstname, String famname, String status, int age, Adult mum, Adult dad) {
+	public Boolean createProfile(String firstname, String famname, String status, int age, Adult mum, Adult dad)
+			throws Exception {
 		Profile profile = null;
 		if (searchProfile(firstname, famname) == null) {
 			if (age > 16) {
@@ -53,8 +71,22 @@ public class Driver {
 		return false;
 	}
 
-	public Boolean createDependent(String firstname, String famname, String status, int age, Profile parent1,
-			Profile parent2) {
+	public void DeleteProfile(String firstname, String famname)
+			throws Exception {
+	
+			Profile profile= searchProfile(firstname, famname); 
+			if (profile.getRelatives()!= null) {
+				throw new NoParentException ("Parent profile can not be deleted, because it has a connected child");
+			}
+			else {
+					_profiles.remove(profile);
+				}
+	}
+
+	
+	
+	public Boolean createChild(String firstname, String famname, String status, int age, Adult parent1, Adult parent2)
+			throws Exception {
 		if (searchProfile(firstname, famname) == null) {
 			Profile profile = new Child(firstname, famname, status, age, parent1, parent2);
 			_profiles.add(profile);
@@ -64,7 +96,7 @@ public class Driver {
 	}
 
 	/// connect two profiles
-	public Boolean AddFriend(Profile profile1, Profile profile2) {
+	public Boolean AddFriend(Profile profile1, Profile profile2) throws Exception {
 		Boolean success = profile1.addfriend(profile2, false);
 		if (!success) {
 			return false;

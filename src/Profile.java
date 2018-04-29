@@ -1,3 +1,4 @@
+
 ////Author: Romina Sharifpour
 //package assignment2;
 
@@ -11,9 +12,8 @@ public abstract class Profile {
 	protected String _status;
 	protected int _age;
 	protected Set<Profile> _friendlist = new HashSet<>();
-	
 
-	public Profile (String firstname, String famname, String status, int age) {
+	public Profile(String firstname, String famname, String status, int age) {
 		this._name = firstname;
 		this._surname = famname;
 		this._status = status;
@@ -62,7 +62,7 @@ public abstract class Profile {
 	}
 
 	/// add friend method, and to avoid child and adult connecting
-	public abstract Boolean addfriend(Profile profile, Boolean isRelative);
+	public abstract Boolean addfriend(Profile profile, Boolean isRelative) throws Exception;
 
 	/// dependent and parent relationships, we're using a set to maintain the
 	/// dependents of a profile
@@ -74,7 +74,6 @@ public abstract class Profile {
 		}
 	}
 
-	
 	@Override
 	public String toString() {
 		String profileString = "";
