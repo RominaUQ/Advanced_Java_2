@@ -1,61 +1,157 @@
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import java.io.FileInputStream;
 
 public class Gui extends Application {
-		  
-	@Override // Override the start method from the superclass
-	  public void start(Stage primaryStage) throws exception {
-	  GridPane root= new GridPane();
-	  
-	  Button display= new Button ("Display");
-	  Button Delete= new Button ("Add");
-	  Button Add= new Button ("Delete");
-	  
+	private Driver _driver;
 
-	  root.add(display, 1, 1,1, 1);
-	  root.add(Delete, 	1, 5,1, 1);
-	  root.add(Add, 	1, 10,1, 5);
-	 // root.addRow(3, display, Add, Delete );
-	  root.setAlignment(Pos.TOP_LEFT);
-	 
-	  Label textFieldLabel = new Label("search the profile");
-      TextField textField = new TextField();
-     // root.add(10,textFieldLabel, textField);
-	  
-	  //root.setVgap(20);
-	 // root.addRow(1, display);
-	 // root.addRow(2, Add);
-	  //root.addRow(3, Delete);
-	  
-	  /*root.getChildren().add(new Button("Display"));
-	  root.getChildren().add(new Button("Add a Profile"));
-	  root.getChildren().add(new Button("Delete a Profile"));
-	  root.getChildren().add(new Button("Check Connection"));
-	  root.getChildren().add(new Button("Create a New Profile"));
-	  root.getChildren().add(new Button("Exit"));*/
-		
-	 root.setPadding(new Insets(30));
-	 Scene scene= new Scene(root, 500, 400);
-	 primaryStage.setTitle("Menu");
-	 primaryStage.setScene(scene);
-	 primaryStage.show();
+	public Gui() {
+		_driver = new Driver();
 	}
-		public static void main(String[] args) {
-		       Application.launch(args);
-		  }	
+
+	@Override // Override the start method from the superclass
+	public void start(Stage primaryStage) throws exception {
+		GridPane root = new GridPane();
+		// root.setGridLinesVisible(true);
+		Button btnDisplay = new Button("Display");
+		Button btnDelete = new Button("Delete");
+		Button btnAdd = new Button("Add");
+
+		root.add(btnDisplay, 1, 1, 2, 2);
+		root.add(btnDelete, 1, 5, 2, 2);
+		root.add(btnAdd, 1, 10, 2, 2);
+		root.setAlignment(Pos.TOP_LEFT);
+
+		Label textFieldLabel = new Label("search the profile");
+		TextField textField = new TextField();
+		Button btnSearch = new Button("Search");
+		root.add(textFieldLabel, 7, 1, 2, 2);
+		root.add(textField, 9, 1, 4, 2);
+		root.add(btnSearch, 13, 1, 2, 2);
+
+		root.setHgap(10);
+		root.setVgap(10);
+
+		setAddButtonAction(btnAdd, primaryStage);
+		setSearchButtonAction(btnSearch, primaryStage);
+		
+		root.setPadding(new Insets(30));
+		Scene scene = new Scene(root, 800, 600);
+		primaryStage.setTitle("Menu");
+		primaryStage.setScene(scene);
+		primaryStage.show();
+	}
+
+	private void setAddButtonAction(Button add, Stage primaryStage) {
+		add.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				final Stage dialogStage = new Stage();
+				dialogStage.initModality(Modality.APPLICATION_MODAL);
+				dialogStage.initOwner(primaryStage);
+				dialogStage.setTitle("Create a new profile");
+
+				GridPane addPopupGrid = new GridPane();
+				Label firstNameLabel = new Label("First name");
+				TextField firstNameText = new TextField();
+				Label surNameLabel = new Label("Surname");
+				TextField surNameText = new TextField();
+				Label ageLabel = new Label("Age");
+				TextField ageText = new TextField();
+				Label statusLabel = new Label("Age");
+				TextField statusText = new TextField();
+
+				addPopupGrid.add(firstNameLabel, 1, 1, 2, 2);
+				addPopupGrid.add(firstNameText, 3, 1, 2, 2);
+				addPopupGrid.add(surNameLabel, 1, 3, 2, 2);
+				addPopupGrid.add(surNameText, 3, 3, 2, 2);
+				addPopupGrid.add(ageLabel, 1, 5, 2, 2);
+				addPopupGrid.add(ageText, 3, 5, 2, 2);
+				addPopupGrid.add(statusLabel, 1, 7, 2, 2);
+				addPopupGrid.add(statusText, 3, 7, 2, 2);
+
+				Label momFirstNameLabel = new Label("Mother's First name");
+				TextField momFirstNameText = new TextField();
+				Label momSurNameLabel = new Label("Mother's Surname");
+				TextField momSurNameText = new TextField();
+
+				addPopupGrid.add(momFirstNameLabel, 1, 9, 2, 2);
+				addPopupGrid.add(momFirstNameText, 3, 9, 2, 2);
+				addPopupGrid.add(momSurNameLabel, 1, 11, 2, 2);
+				addPopupGrid.add(momSurNameText, 3, 11, 2, 2);
+
+				Label dadFirstNameLabel = new Label("Father's First name");
+				TextField dadFirstNameText = new TextField();
+				Label dadSurNameLabel = new Label("Father's Surname");
+				TextField dadSurNameText = new TextField();
+
+				addPopupGrid.add(dadFirstNameLabel, 1, 13, 2, 2);
+				addPopupGrid.add(dadFirstNameText, 3, 13, 2, 2);
+				addPopupGrid.add(dadSurNameLabel, 1, 15, 2, 2);
+				addPopupGrid.add(dadSurNameText, 3, 15, 2, 2);
+
+				Button btnCreate = new Button("Create");
+				Button btnCancel = new Button("Cancel");
+
+				addPopupGrid.add(btnCreate, 1, 17, 2, 2);
+				addPopupGrid.add(btnCancel, 3, 17, 2, 2);
+
+				btnCancel.setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent event) {
+						dialogStage.close();
+					}
+				});
+
+				btnCreate.setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent event) {
+						Boolean success = false;
+						try {
+							int age = Integer.parseInt(ageText.getText());
+							success = _driver.createProfile(firstNameText.getText(), surNameText.getText(), statusText.getText(),
+									age);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						if (success) {
+							dialogStage.close();
+						}
+					}
+				});
+
+				addPopupGrid.setAlignment(Pos.TOP_LEFT);
+
+				addPopupGrid.setHgap(10);
+				addPopupGrid.setVgap(10);
+
+				Scene dialogScene = new Scene(addPopupGrid, 600, 400);
+				dialogStage.setScene(dialogScene);
+				dialogStage.show();
+			}
+		});
+	}
+	
+	private void setSearchButtonAction(Button search, Stage primaryStage) {
+		search.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+
+
+			}
+		});
+	}
+
+	public static void main(String[] args) {
+		Application.launch(args);
+	}
 }
