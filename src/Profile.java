@@ -8,14 +8,12 @@ import java.util.Set;
 ///Profile class represent the profile of all adults and superclass for other profile types such as dependents
 public abstract class Profile {
 	protected String _name;
-	protected String _surname;
 	protected String _status;
 	protected int _age;
 	protected Set<Profile> _friendlist = new HashSet<>();
 
-	public Profile(String firstname, String famname, String status, int age) {
-		this._name = firstname;
-		this._surname = famname;
+	public Profile(String name, String status, int age) {
+		this._name = name;
 		this._status = status;
 		this._age = age;
 	}
@@ -23,29 +21,20 @@ public abstract class Profile {
 	//// getters and setters
 
 	/// this is to represent Adult profiles (overloading)
-	public Profile(String firstname, String famname) {
-		this._name = firstname;
-		this._surname = famname;
+	public Profile(String name) {
+		this._name = name;
 	}
 
 	public void setFriendlist(Set<Profile> friendlist) {
 		_friendlist = friendlist;
 	}
 
-	public void setname(String firstname) {
-		_name = firstname;
+	public void setname(String name) {
+		_name = name;
 	}
 
 	public String getname() {
 		return _name;
-	}
-
-	public void setsurname(String familyname) {
-		_surname = familyname;
-	}
-
-	public String getsurname() {
-		return _surname;
 	}
 
 	public String getstatus() {
@@ -78,7 +67,6 @@ public abstract class Profile {
 	public String toString() {
 		String profileString = "";
 		profileString += _name + " ";
-		profileString += _surname + " - ";
 		profileString += _age + " - ";
 		profileString += _status;
 		return profileString;

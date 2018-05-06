@@ -7,8 +7,8 @@ public class Adult extends Profile {
 	Adult Spouse;
 	Set<Adult> _colleague = new HashSet<>();
 
-	public Adult(String firstname, String famname, String status, int age) {
-		super(firstname, famname, status, age);
+	public Adult(String name, String status, int age) {
+		super(name, status, age);
 	}
 
 	protected Set<Child> _dependents = new HashSet<>();

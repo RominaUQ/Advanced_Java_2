@@ -1,7 +1,10 @@
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
@@ -10,12 +13,15 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 
 public class Gui extends Application {
 	private Driver _driver;
+	private ObservableList<Profile> _names;
 
 	public Gui() {
 		_driver = new Driver();
+		_names = FXCollections.<Profile>observableArrayList();
 	}
 
 	@Override // Override the start method from the superclass
@@ -31,19 +37,25 @@ public class Gui extends Application {
 		root.add(btnAdd, 1, 10, 2, 2);
 		root.setAlignment(Pos.TOP_LEFT);
 
-		Label textFieldLabel = new Label("search the profile");
-		TextField textField = new TextField();
+		Label searchLabel = new Label("search the profile");
+		TextField searchText = new TextField();
 		Button btnSearch = new Button("Search");
-		root.add(textFieldLabel, 7, 1, 2, 2);
-		root.add(textField, 9, 1, 4, 2);
+		root.add(searchLabel, 7, 1, 2, 2);
+		root.add(searchText, 9, 1, 4, 2);
 		root.add(btnSearch, 13, 1, 2, 2);
+
+		ListView<Profile> lstNames = new ListView<>(_names);
+		lstNames.setOrientation(Orientation.VERTICAL);
+		lstNames.setPrefSize(120, 100);
+
+		root.add(lstNames, 7, 3, 2, 2);
 
 		root.setHgap(10);
 		root.setVgap(10);
 
-		setAddButtonAction(btnAdd, primaryStage);
-		setSearchButtonAction(btnSearch, primaryStage);
-		
+		setAddButtonAction(primaryStage, btnAdd);
+		setSearchButtonAction(primaryStage, btnSearch, searchText);
+
 		root.setPadding(new Insets(30));
 		Scene scene = new Scene(root, 800, 600);
 		primaryStage.setTitle("Menu");
@@ -51,7 +63,7 @@ public class Gui extends Application {
 		primaryStage.show();
 	}
 
-	private void setAddButtonAction(Button add, Stage primaryStage) {
+	private void setAddButtonAction(Stage primaryStage, Button add) {
 		add.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -61,43 +73,31 @@ public class Gui extends Application {
 				dialogStage.setTitle("Create a new profile");
 
 				GridPane addPopupGrid = new GridPane();
-				Label firstNameLabel = new Label("First name");
-				TextField firstNameText = new TextField();
-				Label surNameLabel = new Label("Surname");
-				TextField surNameText = new TextField();
+				Label nameLabel = new Label("Name");
+				TextField nameText = new TextField();
 				Label ageLabel = new Label("Age");
 				TextField ageText = new TextField();
-				Label statusLabel = new Label("Age");
+				Label statusLabel = new Label("Status");
 				TextField statusText = new TextField();
 
-				addPopupGrid.add(firstNameLabel, 1, 1, 2, 2);
-				addPopupGrid.add(firstNameText, 3, 1, 2, 2);
-				addPopupGrid.add(surNameLabel, 1, 3, 2, 2);
-				addPopupGrid.add(surNameText, 3, 3, 2, 2);
-				addPopupGrid.add(ageLabel, 1, 5, 2, 2);
-				addPopupGrid.add(ageText, 3, 5, 2, 2);
-				addPopupGrid.add(statusLabel, 1, 7, 2, 2);
-				addPopupGrid.add(statusText, 3, 7, 2, 2);
+				addPopupGrid.add(nameLabel, 1, 1, 2, 2);
+				addPopupGrid.add(nameText, 3, 1, 2, 2);
+				addPopupGrid.add(ageLabel, 1, 3, 2, 2);
+				addPopupGrid.add(ageText, 3, 3, 2, 2);
+				addPopupGrid.add(statusLabel, 1, 5, 2, 2);
+				addPopupGrid.add(statusText, 3, 5, 2, 2);
 
-				Label momFirstNameLabel = new Label("Mother's First name");
-				TextField momFirstNameText = new TextField();
-				Label momSurNameLabel = new Label("Mother's Surname");
-				TextField momSurNameText = new TextField();
+				Label momNameLabel = new Label("Mother's name");
+				TextField momNameText = new TextField();
 
-				addPopupGrid.add(momFirstNameLabel, 1, 9, 2, 2);
-				addPopupGrid.add(momFirstNameText, 3, 9, 2, 2);
-				addPopupGrid.add(momSurNameLabel, 1, 11, 2, 2);
-				addPopupGrid.add(momSurNameText, 3, 11, 2, 2);
+				addPopupGrid.add(momNameLabel, 1, 7, 2, 2);
+				addPopupGrid.add(momNameText, 3, 7, 2, 2);
 
-				Label dadFirstNameLabel = new Label("Father's First name");
-				TextField dadFirstNameText = new TextField();
-				Label dadSurNameLabel = new Label("Father's Surname");
-				TextField dadSurNameText = new TextField();
+				Label dadNameLabel = new Label("Father's name");
+				TextField dadNameText = new TextField();
 
-				addPopupGrid.add(dadFirstNameLabel, 1, 13, 2, 2);
-				addPopupGrid.add(dadFirstNameText, 3, 13, 2, 2);
-				addPopupGrid.add(dadSurNameLabel, 1, 15, 2, 2);
-				addPopupGrid.add(dadSurNameText, 3, 15, 2, 2);
+				addPopupGrid.add(dadNameLabel, 1, 9, 2, 2);
+				addPopupGrid.add(dadNameText, 3, 9, 2, 2);
 
 				Button btnCreate = new Button("Create");
 				Button btnCancel = new Button("Cancel");
@@ -118,8 +118,7 @@ public class Gui extends Application {
 						Boolean success = false;
 						try {
 							int age = Integer.parseInt(ageText.getText());
-							success = _driver.createProfile(firstNameText.getText(), surNameText.getText(), statusText.getText(),
-									age);
+							success = _driver.createProfile(nameText.getText(), statusText.getText(), age);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -140,13 +139,15 @@ public class Gui extends Application {
 			}
 		});
 	}
-	
-	private void setSearchButtonAction(Button search, Stage primaryStage) {
+
+	private void setSearchButtonAction(Stage primaryStage, Button search, TextField searchText) {
 		search.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-
-
+				Profile profile = _driver.searchProfile(searchText.getText());
+				if (profile != null) {
+					_names.add(profile);
+				}
 			}
 		});
 	}

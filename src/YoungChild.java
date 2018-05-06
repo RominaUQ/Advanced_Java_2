@@ -2,8 +2,8 @@ import exceptions.*;
 
 public class YoungChild extends Child {
 
-	public YoungChild(String firstname, String famname, String status, int age , Adult MumParent, Adult DadParent) throws Exception {
-		super(firstname, famname, status, age, MumParent, DadParent);
+	public YoungChild(String name, String status, int age , Adult MumParent, Adult DadParent) throws Exception {
+		super(name, status, age, MumParent, DadParent);
 	}
 	 
 	public Boolean addfriend (Profile profile, Boolean isRelative) throws Exception {

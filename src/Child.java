@@ -13,8 +13,8 @@ public class Child extends Profile {
 	int age;
 	Set<Child> _classmate = new HashSet<>();
 
-	public Child(String firstname, String famname, String status, int age, Adult MumParent, Adult DadParent) throws Exception {
-		super(firstname, famname, status, age);
+	public Child(String name, String status, int age, Adult MumParent, Adult DadParent) throws Exception {
+		super(name, status, age);
 		this._parent1 = MumParent;
 		this._parent2 = DadParent;
 
@@ -72,17 +72,9 @@ public class Child extends Profile {
 
 	}
 
-	public String getMumfamname() {
-		return _parent1.getsurname();
-	}
-
 	public String getDadname() {
 		return _parent2.getname();
 
-	}
-
-	public String getDadfamname() {
-		return _parent2.getsurname();
 	}
 
 	public void setclassmate(Set<Child> classmate) {

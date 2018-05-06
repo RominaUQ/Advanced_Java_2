@@ -1,6 +1,5 @@
 import exceptions.*;
 ////Author: Aleksey Savran
-import java.math.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,26 +11,26 @@ public class Driver {
 	//// add some object for building the network
 	public Driver() {
 		try {
-			Adult prof1 = new Adult("Romina", "Sharif", "Working at Deloitte", 21);
-			Adult prof2 = new Adult("Nicholas", "Brown", "Working at RMIT", 35);
-			Adult prof3 = new Adult("John", "Smith", "<3", 29);
-			Adult prof4 = new Adult("Lisa", "Chan", "nurse at royal hospital", 26);
-			Adult prof5 = new Adult("Lola", "Gray", "nurse at royal hospital", 24);
-			
+			Adult prof1 = new Adult("Romina Sharif", "Working at Deloitte", 21);
+			Adult prof2 = new Adult("Nicholas Brown", "Working at RMIT", 35);
+			Adult prof3 = new Adult("John Smith", "<3", 29);
+			Adult prof4 = new Adult("Lisa Chan", "nurse at royal hospital", 26);
+			Adult prof5 = new Adult("Lola Gray", "nurse at royal hospital", 24);
+
 			prof1.marry(prof2);
 			prof2.marry(prof1);
-			
-			Child child1 = new Child("Honey", "Brown", "Hi!I am baby", 13, prof1, prof2);
-			Child child2 = new Child("Sugar", "Brown", "Weeee", 6, prof1, prof2);
-			Child child3 = new Child("Rose", "Daw", "Hi!I am baby", 15, prof3, prof4);
-			Child YoungChild1 = new YoungChild("Bee", "Smith", "AWwwww", 2, prof4, prof3);
+
+			Child child1 = new Child("Honey Brown", "Hi!I am baby", 13, prof1, prof2);
+			Child child2 = new Child("Sugar Brown", "Weeee", 6, prof1, prof2);
+			Child child3 = new Child("Rose Daw", "Hi!I am baby", 15, prof3, prof4);
+			Child YoungChild1 = new YoungChild("Bee Smith", "AWwwww", 2, prof4, prof3);
 
 			AddFriend(prof1, prof2);
 			AddFriend(prof3, prof1);
 			AddFriend(child1, child2);
 			AddFriend(prof4, prof5);
 			AddFriend(child1, child3);
-		
+
 			_profiles.add(prof1);
 			_profiles.add(prof2);
 			_profiles.add(prof3);
@@ -41,29 +40,27 @@ public class Driver {
 			_profiles.add(child2);
 			_profiles.add(child3);
 			_profiles.add(YoungChild1);
-		
+
 		} catch (Exception ex) {
 
 		}
-		
-	}
 
+	}
 
 	/// create a profile method
-	public Boolean createProfile(String firstname, String famname, String status, int age) throws Exception {
-		return createProfile(firstname, famname, status, age, null, null);
+	public Boolean createProfile(String name, String status, int age) throws Exception {
+		return createProfile(name, status, age, null, null);
 	}
 
-	public Boolean createProfile(String firstname, String famname, String status, int age, Adult mum, Adult dad)
-			throws Exception {
+	public Boolean createProfile(String name, String status, int age, Adult mum, Adult dad) throws Exception {
 		Profile profile = null;
-		if (searchProfile(firstname, famname) == null) {
+		if (searchProfile(name) == null) {
 			if (age > 16) {
-				profile = new Adult(firstname, famname, status, age);
+				profile = new Adult(name, status, age);
 			} else if (age <= 16 && age > 2) {
-				profile = new Child(firstname, famname, status, age, mum, dad);
+				profile = new Child(name, status, age, mum, dad);
 			} else {
-				profile = new YoungChild(firstname, famname, status, age, mum, dad);
+				profile = new YoungChild(name, status, age, mum, dad);
 			}
 			_profiles.add(profile);
 			return true;
@@ -71,24 +68,20 @@ public class Driver {
 		return false;
 	}
 
-	public void DeleteProfile(String firstname, String famname)
-			throws Exception {
-	
-			Profile profile= searchProfile(firstname, famname); 
-			if (profile.getRelatives()!= null) {
-				throw new NoParentException ("Parent profile can not be deleted, because it has a connected child");
-			}
-			else {
-					_profiles.remove(profile);
-				}
+	public void DeleteProfile(String name) throws Exception {
+
+		Profile profile = searchProfile(name);
+		if (profile.getRelatives() != null) {
+			throw new NoParentException("Parent profile can not be deleted, because it has a connected child");
+		} else {
+			_profiles.remove(profile);
+		}
 	}
 
-	
-	
-	public Boolean createChild(String firstname, String famname, String status, int age, Adult parent1, Adult parent2)
+	public Boolean createChild(String name, String status, int age, Adult parent1, Adult parent2)
 			throws Exception {
-		if (searchProfile(firstname, famname) == null) {
-			Profile profile = new Child(firstname, famname, status, age, parent1, parent2);
+		if (searchProfile(name) == null) {
+			Profile profile = new Child(name, status, age, parent1, parent2);
 			_profiles.add(profile);
 			return true;
 		}
@@ -112,9 +105,9 @@ public class Driver {
 	}
 
 	/// look up a profile
-	public Profile searchProfile(String name, String surname) {
+	public Profile searchProfile(String name) {
 		for (Profile p : _profiles) {
-			if (p.getname().equals(name) && p.getsurname().equals(surname)) {
+			if (p.getname().equals(name)) {
 				return p;
 			}
 		}
@@ -136,14 +129,14 @@ public class Driver {
 	}
 
 	//// displaying profile
-	public String DiplayProfile(String name, String surname) {
-		Profile profile = searchProfile(name, surname);
+	public String DiplayProfile(String name) {
+		Profile profile = searchProfile(name);
 		return profile.toString();
 	}
 	///// display the friend list of a profile
 
-	public String Diplayfriendlist(String name, String surname) {
-		Profile profile = searchProfile(name, surname);
+	public String Diplayfriendlist(String name) {
+		Profile profile = searchProfile(name);
 		Set<Profile> _friendlist = profile.getfriendlist();
 
 		if (_friendlist.isEmpty()) {
@@ -153,8 +146,6 @@ public class Driver {
 
 			for (Profile p : _friendlist) {
 				friends += p.getname();
-				friends += " ";
-				friends += p.getsurname();
 				friends += "\r\n";
 			}
 			return friends;
