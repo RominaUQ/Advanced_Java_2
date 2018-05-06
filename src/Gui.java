@@ -1,4 +1,6 @@
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,6 +20,7 @@ import javafx.scene.control.ListView;
 public class Gui extends Application {
 	private Driver _driver;
 	private ObservableList<Profile> _names;
+	private Profile _selectedProfile;
 
 	public Gui() {
 		_driver = new Driver();
@@ -25,9 +28,8 @@ public class Gui extends Application {
 	}
 
 	@Override // Override the start method from the superclass
-	public void start(Stage primaryStage) throws exception {
+	public void start(Stage primaryStage) throws Exception {
 		GridPane root = new GridPane();
-		// root.setGridLinesVisible(true);
 		Button btnDisplay = new Button("Display");
 		Button btnDelete = new Button("Delete");
 		Button btnAdd = new Button("Add");
@@ -46,7 +48,12 @@ public class Gui extends Application {
 
 		ListView<Profile> lstNames = new ListView<>(_names);
 		lstNames.setOrientation(Orientation.VERTICAL);
-		lstNames.setPrefSize(120, 100);
+		lstNames.setPrefSize(300, 200);
+		lstNames.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Profile>() {
+			public void changed(ObservableValue<? extends Profile> ov, final Profile oldvalue, final Profile newvalue) {
+				_selectedProfile = newvalue;
+			}
+		});
 
 		root.add(lstNames, 7, 3, 2, 2);
 
@@ -54,13 +61,31 @@ public class Gui extends Application {
 		root.setVgap(10);
 
 		setAddButtonAction(primaryStage, btnAdd);
-		setSearchButtonAction(primaryStage, btnSearch, searchText);
+		setSearchButtonAction(btnSearch, searchText);
+		setDeleteButtonAction(btnDelete);
 
 		root.setPadding(new Insets(30));
 		Scene scene = new Scene(root, 800, 600);
 		primaryStage.setTitle("Menu");
 		primaryStage.setScene(scene);
 		primaryStage.show();
+	}
+
+	private void setDeleteButtonAction(Button btnDelete) {
+		btnDelete.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				try {
+					if (_selectedProfile != null) {
+						_driver.DeleteProfile(_selectedProfile.getname());
+						_names.remove(_selectedProfile);
+						_selectedProfile = null;
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 
 	private void setAddButtonAction(Stage primaryStage, Button add) {
@@ -140,7 +165,7 @@ public class Gui extends Application {
 		});
 	}
 
-	private void setSearchButtonAction(Stage primaryStage, Button search, TextField searchText) {
+	private void setSearchButtonAction(Button search, TextField searchText) {
 		search.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {

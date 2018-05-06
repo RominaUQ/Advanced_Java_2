@@ -71,7 +71,7 @@ public class Driver {
 	public void DeleteProfile(String name) throws Exception {
 
 		Profile profile = searchProfile(name);
-		if (profile.getRelatives() != null) {
+		if (profile.getRelatives() != null && profile.getRelatives().size() > 0) {
 			throw new NoParentException("Parent profile can not be deleted, because it has a connected child");
 		} else {
 			_profiles.remove(profile);
