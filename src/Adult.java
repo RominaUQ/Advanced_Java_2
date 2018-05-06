@@ -24,11 +24,11 @@ public class Adult extends Profile {
 		return true;
 	}
 
-	public void marry(Adult Adult) throws Exception {
-		if (Adult.getSpouse() != null || Spouse != null) {
+	public void marry(Adult adult) throws Exception {
+		if ((adult.getSpouse() != null || Spouse != null) && !adult.getSpouse().getname().equals(this.getname())) {
 			throw new NoAvailableException("This person is already married to someone else and is unavailble");
 		} else {
-			Spouse = Adult;
+			Spouse = adult;
 		}
 	}
 

@@ -63,6 +63,7 @@ public class Gui extends Application {
 		setAddButtonAction(primaryStage, btnAdd);
 		setSearchButtonAction(btnSearch, searchText);
 		setDeleteButtonAction(btnDelete);
+		setDiplayButtonAction(btnDisplay, primaryStage);
 
 		root.setPadding(new Insets(30));
 		Scene scene = new Scene(root, 800, 600);
@@ -176,6 +177,63 @@ public class Gui extends Application {
 			}
 		});
 	}
+
+	private void setDiplayButtonAction(Button btnDisplay, Stage primaryStage) {
+		btnDisplay.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+
+			public void handle(ActionEvent event) {
+				final Stage DisplayStage = new Stage();
+				DisplayStage.initModality(Modality.APPLICATION_MODAL);
+				DisplayStage.initOwner(primaryStage);
+				DisplayStage.setTitle("Profile Display");
+				
+				GridPane DisplayPopupGrid = new GridPane();
+				
+				Label nameLabel = new Label("Name:");
+				Label nameText = new Label (_selectedProfile.getname());
+				Label ageLabel = new Label("Age:");
+				Label ageText = new Label(_selectedProfile.getage() + "");
+				Label statusLabel = new Label("Status:");
+				Label statusText = new Label(_selectedProfile.getstatus());
+				
+				ObservableList<Profile> listoffriends= FXCollections.<Profile>observableArrayList(_selectedProfile.getfriendlist());
+				
+				ListView<Profile> _friendlist = new ListView<>(listoffriends);
+				_friendlist.setOrientation(Orientation.VERTICAL);
+				_friendlist.setPrefSize(300, 200);
+				_friendlist.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Profile>() {
+					public void changed(ObservableValue<? extends Profile> ov, final Profile oldvalue, final Profile newvalue) {
+						_selectedProfile = newvalue;
+					}
+				});
+				
+				DisplayPopupGrid.add(nameLabel, 1, 1, 2, 2);
+				DisplayPopupGrid.add(nameText, 3, 1, 2, 2);
+				DisplayPopupGrid.add(ageLabel, 1, 3, 2, 2);
+				DisplayPopupGrid.add(ageText, 3, 3, 2, 2);
+				DisplayPopupGrid.add(statusLabel, 1, 5, 2, 2);
+				DisplayPopupGrid.add(statusText, 3, 5, 2, 2);
+				DisplayPopupGrid.add(_friendlist, 1, 8, 2, 2);
+				
+				Scene DisplayScene = new Scene(DisplayPopupGrid, 600, 400);
+				DisplayStage.setScene(DisplayScene);
+				DisplayStage.show();
+			}
+		});
+	}
+
+	/*
+	 * GridPane addPopupGrid = new GridPane(); Label nameLabel = new Label("Name");
+	 * TextField nameText = new TextField(); Label ageLabel = new Label("Age");
+	 * TextField ageText = new TextField(); Label statusLabel = new Label("Status");
+	 * TextField statusText = new TextField();
+	 * 
+	 * addPopupGrid.add(nameLabel, 1, 1, 2, 2); addPopupGrid.add(nameText, 3, 1, 2,
+	 * 2); addPopupGrid.add(ageLabel, 1, 3, 2, 2); addPopupGrid.add(ageText, 3, 3,
+	 * 2, 2); addPopupGrid.add(statusLabel, 1, 5, 2, 2);
+	 * addPopupGrid.add(statusText, 3, 5, 2, 2);
+	 */
 
 	public static void main(String[] args) {
 		Application.launch(args);

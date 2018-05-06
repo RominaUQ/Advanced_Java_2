@@ -18,9 +18,8 @@ public class Child extends Profile {
 		this._parent1 = MumParent;
 		this._parent2 = DadParent;
 
-		if (MumParent==null || DadParent==null||!MumParent.getSpouse().equals(DadParent)) { 
-			throw new NoParentException ("A Child can only be one couple dependent, including not only one parent");
-			
+		if (MumParent == null || DadParent == null || !MumParent.getSpouse().equals(DadParent)) {
+			throw new NoParentException("A Child can only be one couple dependent, including not only one parent");
 		}
 		try {
 			this.addfriend(DadParent, true);
@@ -52,9 +51,9 @@ public class Child extends Profile {
 		if (profile.getage() < 16 && agediff < 3) {
 			_friendlist.add(profile);
 		} else {
-			throw new NotToBeFriendsException (
-			"You are not allowed to add a friend more than 3 years older than yourself");
-					}
+			throw new NotToBeFriendsException(
+					"You are not allowed to add a friend more than 3 years older than yourself");
+		}
 		return true;
 	}
 

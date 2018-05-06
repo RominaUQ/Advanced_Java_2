@@ -19,6 +19,8 @@ public class Driver {
 
 			prof1.marry(prof2);
 			prof2.marry(prof1);
+			prof4.marry(prof3);
+			prof3.marry(prof4);
 
 			Child child1 = new Child("Honey Brown", "Hi!I am baby", 13, prof1, prof2);
 			Child child2 = new Child("Sugar Brown", "Weeee", 6, prof1, prof2);
@@ -27,7 +29,6 @@ public class Driver {
 
 			AddFriend(prof1, prof2);
 			AddFriend(prof3, prof1);
-			AddFriend(child1, child2);
 			AddFriend(prof4, prof5);
 			AddFriend(child1, child3);
 
@@ -42,7 +43,7 @@ public class Driver {
 			_profiles.add(YoungChild1);
 
 		} catch (Exception ex) {
-
+			System.out.println(ex.toString());
 		}
 
 	}
