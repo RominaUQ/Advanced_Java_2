@@ -30,6 +30,7 @@ public class Driver {
 			AddFriend(prof1, prof2);
 			AddFriend(prof3, prof1);
 			AddFriend(prof4, prof5);
+			AddFriend(prof3, prof4);
 			AddFriend(child1, child3);
 
 			_profiles.add(prof1);
@@ -70,17 +71,20 @@ public class Driver {
 	}
 
 	public void DeleteProfile(String name) throws Exception {
-
 		Profile profile = searchProfile(name);
-		if (profile.getRelatives() != null && profile.getRelatives().size() > 0) {
+		if (profile.isParent()) {
 			throw new NoParentException("Parent profile can not be deleted, because it has a connected child");
 		} else {
 			_profiles.remove(profile);
+			for (Profile otherProfile : profile.getfriendlist()) {
+				if (otherProfile.getfriendlist().contains(profile)) {
+					otherProfile.removeFriend(profile);
+				}
+			}
 		}
 	}
-
-	public Boolean createChild(String name, String status, int age, Adult parent1, Adult parent2)
-			throws Exception {
+	
+	public Boolean createChild(String name, String status, int age, Adult parent1, Adult parent2) throws Exception {
 		if (searchProfile(name) == null) {
 			Profile profile = new Child(name, status, age, parent1, parent2);
 			_profiles.add(profile);
@@ -101,8 +105,8 @@ public class Driver {
 
 	//// disconnect two profiles
 	public void removeFriend(Profile profile1, Profile profile2) {
-		profile1.removefriend(profile2);
-		profile2.removefriend(profile1);
+		profile1.removeFriend(profile2);
+		profile2.removeFriend(profile1);
 	}
 
 	/// look up a profile

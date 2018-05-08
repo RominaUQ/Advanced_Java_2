@@ -80,6 +80,7 @@ public class Child extends Profile {
 		_classmate = classmate;
 	}
 
+
 	public void addClassmate(Child Child) {
 		if (this.getstatus() == Child.getstatus() && !this._classmate.contains(Child)) {
 			_classmate.add(Child);

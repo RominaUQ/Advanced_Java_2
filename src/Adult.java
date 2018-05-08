@@ -24,6 +24,10 @@ public class Adult extends Profile {
 		return true;
 	}
 
+	public boolean isParent() {
+		return getRelatives().size() > 0;
+	}
+
 	public void marry(Adult adult) throws Exception {
 		if ((adult.getSpouse() != null || Spouse != null) && !adult.getSpouse().getname().equals(this.getname())) {
 			throw new NoAvailableException("This person is already married to someone else and is unavailble");
@@ -43,8 +47,8 @@ public class Adult extends Profile {
 	public Set<Profile> getRelatives() {
 		Set<Profile> dependents = new HashSet<>();
 		for (Profile friend : _friendlist) {
-			if (friend instanceof Child) {
-				dependents.add((Child) friend);
+			if (friend instanceof Child || friend instanceof YoungChild) {
+				dependents.add(friend);
 			}
 		}
 		return dependents;

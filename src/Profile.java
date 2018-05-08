@@ -57,7 +57,11 @@ public abstract class Profile {
 	/// dependents of a profile
 	public abstract Set<Profile> getRelatives();
 
-	public void removefriend(Profile profile) {
+	public boolean isParent() {
+		return false;
+	}
+
+	public void removeFriend(Profile profile) {
 		if (_friendlist.contains(profile)) {
 			_friendlist.remove(profile);
 		}
