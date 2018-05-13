@@ -75,4 +75,32 @@ public abstract class Profile {
 		profileString += _status;
 		return profileString;
 	}
+
+	public String getRelationship(Profile secondProfile) {
+		boolean isInFriendList = _friendlist.contains(secondProfile);
+		if (!isInFriendList) {
+			return "No connection";
+		}
+
+		boolean isRelative = getRelatives().contains(secondProfile);
+		if (isRelative) {
+			if (secondProfile instanceof Adult) {
+				if (!(this instanceof Adult)) {
+					return this.getname() + " is child of " + secondProfile.getname();
+				}
+				if (((Adult) secondProfile).getSpouse().getname().equals(this.getname())) {
+					return this.getname() + " is married to " + secondProfile.getname();
+				}
+			}
+			if (!(secondProfile instanceof Adult) && this.getRelatives().contains(secondProfile)) {
+				return this.getname() + " is parent of " + secondProfile.getname();
+			}
+		}
+
+		if (secondProfile.getstatus().equals(this.getstatus())) {
+			return (secondProfile instanceof Adult) ? "Colleagues" : "Classmates";
+		}
+
+		return "Friends";
+	}
 }

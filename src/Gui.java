@@ -16,27 +16,35 @@ import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 
 public class Gui extends Application {
 	private Driver _driver;
 	private ObservableList<Profile> _names;
 	private Profile _selectedProfile;
+	private Button _btnDisplay;
+	private Button _btnDelete;
+	private Button _btnAdd;
+	private Button _btnCompare;
 
 	public Gui() {
 		_driver = new Driver();
+		_btnDisplay = new Button("Display");
+		_btnDelete = new Button("Delete");
+		_btnAdd = new Button("Add");
+		_btnCompare = new Button("Compare");
+		
 		_names = FXCollections.<Profile>observableArrayList();
 	}
 
 	@Override // Override the start method from the superclass
 	public void start(Stage primaryStage) throws Exception {
 		GridPane root = new GridPane();
-		Button btnDisplay = new Button("Display");
-		Button btnDelete = new Button("Delete");
-		Button btnAdd = new Button("Add");
 
-		root.add(btnDisplay, 1, 1, 2, 2);
-		root.add(btnDelete, 1, 5, 2, 2);
-		root.add(btnAdd, 1, 10, 2, 2);
+		root.add(_btnDisplay, 1, 1, 2, 2);
+		root.add(_btnDelete, 1, 5, 2, 2);
+		root.add(_btnAdd, 1, 10, 2, 2);
+		root.add(_btnCompare, 1, 12, 2, 2);
 		root.setAlignment(Pos.TOP_LEFT);
 
 		Label searchLabel = new Label("search the profile");
@@ -46,12 +54,23 @@ public class Gui extends Application {
 		root.add(searchText, 9, 1, 4, 2);
 		root.add(btnSearch, 13, 1, 2, 2);
 
+		_names.addAll(_driver.getAllProfiles());
 		ListView<Profile> lstNames = new ListView<>(_names);
 		lstNames.setOrientation(Orientation.VERTICAL);
 		lstNames.setPrefSize(300, 200);
+		lstNames.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		lstNames.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Profile>() {
+			@Override
 			public void changed(ObservableValue<? extends Profile> ov, final Profile oldvalue, final Profile newvalue) {
+				// Allow selection of maximum two profiles.
+				if (lstNames.getSelectionModel().getSelectedItems().size() > 2) {
+					lstNames.getSelectionModel().clearSelection();
+					lstNames.getSelectionModel().select(oldvalue);
+					lstNames.getSelectionModel().select(newvalue);
+				}
 				_selectedProfile = newvalue;
+
+				ChangeButtonStatus(lstNames.getSelectionModel().getSelectedItems().size());
 			}
 		});
 
@@ -60,11 +79,12 @@ public class Gui extends Application {
 		root.setHgap(10);
 		root.setVgap(10);
 
-		setAddButtonAction(primaryStage, btnAdd);
+		setAddButtonAction(primaryStage);
 		setSearchButtonAction(btnSearch, searchText);
-		setDeleteButtonAction(btnDelete);
-		setDiplayButtonAction(btnDisplay, primaryStage);
-
+		setDeleteButtonAction();
+		setDisplayButtonAction(primaryStage);
+		setCompareButtonAction(primaryStage, lstNames.getSelectionModel().getSelectedItems());
+		
 		root.setPadding(new Insets(30));
 		Scene scene = new Scene(root, 800, 600);
 		primaryStage.setTitle("Menu");
@@ -72,25 +92,14 @@ public class Gui extends Application {
 		primaryStage.show();
 	}
 
-	private void setDeleteButtonAction(Button btnDelete) {
-		btnDelete.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				try {
-					if (_selectedProfile != null) {
-						_driver.DeleteProfile(_selectedProfile.getname());
-						_names.remove(_selectedProfile);
-						_selectedProfile = null;
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+	private void ChangeButtonStatus(int numberOfProfilesSelected) {
+		_btnDelete.setDisable(numberOfProfilesSelected > 1);
+		_btnDisplay.setDisable(numberOfProfilesSelected > 1);
+		_btnCompare.setDisable(numberOfProfilesSelected < 2);
 	}
 
-	private void setAddButtonAction(Stage primaryStage, Button add) {
-		add.setOnAction(new EventHandler<ActionEvent>() {
+	private void setAddButtonAction(Stage primaryStage) {
+		_btnAdd.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				final Stage dialogStage = new Stage();
@@ -178,8 +187,8 @@ public class Gui extends Application {
 		});
 	}
 
-	private void setDiplayButtonAction(Button btnDisplay, Stage primaryStage) {
-		btnDisplay.setOnAction(new EventHandler<ActionEvent>() {
+	private void setDisplayButtonAction(Stage primaryStage) {
+		_btnDisplay.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				final Stage DisplayStage = new Stage();
@@ -220,6 +229,85 @@ public class Gui extends Application {
 				Scene DisplayScene = new Scene(DisplayPopupGrid, 600, 400);
 				DisplayStage.setScene(DisplayScene);
 				DisplayStage.show();
+			}
+		});
+	}
+
+	private void setCompareButtonAction(Stage primaryStage, ObservableList<Profile> selectedProfiles) {
+		_btnCompare.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				final Stage DisplayStage = new Stage();
+				DisplayStage.initModality(Modality.APPLICATION_MODAL);
+				DisplayStage.initOwner(primaryStage);
+				DisplayStage.setTitle("Profile Display");
+				
+				Profile firstProfile = selectedProfiles.get(0);
+				
+				GridPane compareGrid = new GridPane();
+
+				Label header = new Label("Profile 1:");
+				Label nameLabel = new Label("Name:");
+				Label nameText = new Label(firstProfile.getname());
+				Label ageLabel = new Label("Age:");
+				Label ageText = new Label(firstProfile.getage() + "");
+				Label statusLabel = new Label("Status:");
+				Label statusText = new Label(firstProfile.getstatus());
+				
+				compareGrid.add(header, 1, 1, 2, 2);
+				compareGrid.add(nameLabel, 1, 3, 2, 2);
+				compareGrid.add(nameText, 3, 3, 2, 2);
+				compareGrid.add(ageLabel, 1, 5, 2, 2);
+				compareGrid.add(ageText, 3, 5, 2, 2);
+				compareGrid.add(statusLabel, 1, 7, 2, 2);
+				compareGrid.add(statusText, 3, 7, 2, 2);
+
+				
+				Profile secondProfile = selectedProfiles.get(1);
+				
+				Label secondProfileHeader = new Label("Profile 2:");
+				Label secondProfileNameLabel = new Label("Name:");
+				Label secondProfileNameText = new Label(secondProfile.getname());
+				Label secondProfileAgeLabel = new Label("Age:");
+				Label secondProfileAgeText = new Label(secondProfile.getage() + "");
+				Label secondProfileStatusLabel = new Label("Status:");
+				Label secondProfileStatusText = new Label(secondProfile.getstatus());
+				
+				compareGrid.add(secondProfileHeader, 8, 1, 2, 2);
+				compareGrid.add(secondProfileNameLabel, 8, 3, 2, 2);
+				compareGrid.add(secondProfileNameText, 10, 3, 2, 2);
+				compareGrid.add(secondProfileAgeLabel, 8, 5, 2, 2);
+				compareGrid.add(secondProfileAgeText, 10, 5, 2, 2);
+				compareGrid.add(secondProfileStatusLabel, 8, 7, 2, 2);
+				compareGrid.add(secondProfileStatusText, 10, 7, 2, 2);
+				
+				Label relationshipTypeLabel = new Label("Relationship Type:");
+				Label relationshipTypeText = new Label(firstProfile.getRelationship(secondProfile));
+				
+				compareGrid.add(relationshipTypeLabel, 1, 12, 2, 2);
+				compareGrid.add(relationshipTypeText, 3, 12, 2, 2);
+
+
+				Scene DisplayScene = new Scene(compareGrid, 600, 400);
+				DisplayStage.setScene(DisplayScene);
+				DisplayStage.show();
+			}
+		});
+	}
+
+	private void setDeleteButtonAction() {
+		_btnDelete.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				try {
+					if (_selectedProfile != null) {
+						_driver.DeleteProfile(_selectedProfile.getname());
+						_names.remove(_selectedProfile);
+						_selectedProfile = null;
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		});
 	}

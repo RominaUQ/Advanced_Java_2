@@ -51,6 +51,9 @@ public class Adult extends Profile {
 				dependents.add(friend);
 			}
 		}
+		if (isMarried()) {
+			dependents.add(Spouse);
+		}
 		return dependents;
 	}
 

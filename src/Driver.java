@@ -156,4 +156,8 @@ public class Driver {
 			return friends;
 		}
 	}
+
+	public Set<Profile> getAllProfiles() {
+		return _profiles;
+	}
 }
