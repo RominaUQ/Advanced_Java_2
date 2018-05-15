@@ -77,11 +77,6 @@ public abstract class Profile {
 	}
 
 	public String getRelationship(Profile secondProfile) {
-		boolean isInFriendList = _friendlist.contains(secondProfile);
-		if (!isInFriendList) {
-			return "No connection";
-		}
-
 		boolean isRelative = getRelatives().contains(secondProfile);
 		if (isRelative) {
 			if (secondProfile instanceof Adult) {
@@ -101,6 +96,32 @@ public abstract class Profile {
 			return (secondProfile instanceof Adult) ? "Colleagues" : "Classmates";
 		}
 
-		return "Friends";
+		String thirdLevelText = "";
+		boolean isInFriendList = _friendlist.contains(secondProfile);
+		if (isInFriendList) {
+			return "Friends";
+		} else {
+			// If the profile is not in the friends list we search for 2nd and 3rd level connections.
+			// If we find a 2nd level we return immediately, if a 3rd level is found we save it for later
+			for (Profile friend : _friendlist) {
+				Set<Profile> friendsOfFriend = friend.getfriendlist();
+				for (Profile friendOfFriend : friendsOfFriend) {
+					if (friendOfFriend.equals(secondProfile)) {
+						return "2nd level connection (" + this.getname() + " - " + friend.getname() + " - "
+								+ secondProfile.getname() + ")";
+					} else {
+						if (friendOfFriend.getfriendlist().contains(secondProfile)) {
+							thirdLevelText = "3rd level connection (" + this.getname() + " - " + friend.getname()
+									+ " - " + friendOfFriend.getname() + " - " + secondProfile.getname() + ")";
+						}
+					}
+				}
+			}
+
+			if (thirdLevelText != "") {
+				return thirdLevelText;
+			}
+		}
+		return "Not connected";
 	}
 }

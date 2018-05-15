@@ -28,9 +28,9 @@ public class Driver {
 			Child YoungChild1 = new YoungChild("Bee Smith", "AWwwww", 2, prof4, prof3);
 
 			AddFriend(prof1, prof2);
-			AddFriend(prof3, prof1);
-			AddFriend(prof4, prof5);
+			AddFriend(prof3, prof2);
 			AddFriend(prof3, prof4);
+			AddFriend(prof4, prof5);
 			AddFriend(child1, child3);
 
 			_profiles.add(prof1);
