@@ -3,6 +3,8 @@
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.Collection;
 import java.util.Set;
 import java.io.BufferedReader;
 
@@ -11,6 +13,8 @@ public class MiniNet {
 	public static void main(String[] args) {
 		Boolean showMenu = true;
 		Driver driver = new Driver();
+		
+		
 
 		while (showMenu) {
 			try {
@@ -46,10 +50,12 @@ public class MiniNet {
 
 			int input = Integer.parseInt(menu.readLine());
 			System.out.println("You have entered " + input + "\r\n");
-
+			
+			DataReader reader = new DataReader();
 			Set<Profile> profiles;
 			Profile profile = null;
 			Profile profile2 = null;
+			Collection<Adult> collection = reader.loadProfile();
 
 			String name;
 			String name1;
@@ -98,8 +104,8 @@ public class MiniNet {
 				break;
 
 			case 1: //// listing all the profiles
-				profiles = driver.listMembers();
-				for (Profile p : profiles) {
+				collection = driver.listProfiles();
+				for (Profile p : collection) {
 					System.out.println(p.toString());
 				}
 				break;

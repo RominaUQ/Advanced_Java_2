@@ -142,9 +142,10 @@ public class Gui extends Application {
 					@Override
 					public void handle(ActionEvent event) {
 						Boolean success = false;
-						try {
+						try { 
 							int age = Integer.parseInt(ageText.getText());
 							success = _driver.createProfile(nameText.getText(), statusText.getText(), age);
+							//CreateQueries.createNewUser(name, surname, age, status); This method needs (name, surname, age, status) arguments
 						} catch (Exception e) {
 							e.printStackTrace();
 						}

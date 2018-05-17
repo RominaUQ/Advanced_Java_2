@@ -1,4 +1,6 @@
 import exceptions.*;
+
+import java.util.Collection;
 ////Author: Aleksey Savran
 import java.util.HashSet;
 import java.util.Set;
@@ -7,41 +9,42 @@ import java.util.Set;
 public class Driver {
 
 	private Set<Profile> _profiles = new HashSet<>();
+	private DataReader datareader;
 
 	//// add some object for building the network
 	public Driver() {
 		try {
-			Adult prof1 = new Adult("Romina Sharif", "Working at Deloitte", 21);
-			Adult prof2 = new Adult("Nicholas Brown", "Working at RMIT", 35);
-			Adult prof3 = new Adult("John Smith", "<3", 29);
-			Adult prof4 = new Adult("Lisa Chan", "nurse at royal hospital", 26);
-			Adult prof5 = new Adult("Lola Gray", "nurse at royal hospital", 24);
-
-			prof1.marry(prof2);
-			prof2.marry(prof1);
-			prof4.marry(prof3);
-			prof3.marry(prof4);
-
-			Child child1 = new Child("Honey Brown", "Hi!I am baby", 13, prof1, prof2);
-			Child child2 = new Child("Sugar Brown", "Weeee", 6, prof1, prof2);
-			Child child3 = new Child("Rose Daw", "Hi!I am baby", 15, prof3, prof4);
-			Child YoungChild1 = new YoungChild("Bee Smith", "AWwwww", 2, prof4, prof3);
-
-			AddFriend(prof1, prof2);
-			AddFriend(prof3, prof1);
-			AddFriend(prof4, prof5);
-			AddFriend(prof3, prof4);
-			AddFriend(child1, child3);
-
-			_profiles.add(prof1);
-			_profiles.add(prof2);
-			_profiles.add(prof3);
-			_profiles.add(prof4);
-			_profiles.add(prof5);
-			_profiles.add(child1);
-			_profiles.add(child2);
-			_profiles.add(child3);
-			_profiles.add(YoungChild1);
+//			Adult prof1 = new Adult("Romina Sharif", "Working at Deloitte", 21);
+//			Adult prof2 = new Adult("Nicholas Brown", "Working at RMIT", 35);
+//			Adult prof3 = new Adult("John Smith", "<3", 29);
+//			Adult prof4 = new Adult("Lisa Chan", "nurse at royal hospital", 26);
+//			Adult prof5 = new Adult("Lola Gray", "nurse at royal hospital", 24);
+//
+//			prof1.marry(prof2);
+//			prof2.marry(prof1);
+//			prof4.marry(prof3);
+//			prof3.marry(prof4);
+//
+//			Child child1 = new Child("Honey Brown", "Hi!I am baby", 13, prof1, prof2);
+//			Child child2 = new Child("Sugar Brown", "Weeee", 6, prof1, prof2);
+//			Child child3 = new Child("Rose Daw", "Hi!I am baby", 15, prof3, prof4);
+//			Child YoungChild1 = new YoungChild("Bee Smith", "AWwwww", 2, prof4, prof3);
+//
+//			AddFriend(prof1, prof2);
+//			AddFriend(prof3, prof1);
+//			AddFriend(prof4, prof5);
+//			AddFriend(prof3, prof4);
+//			AddFriend(child1, child3);
+//
+//			_profiles.add(prof1);
+//			_profiles.add(prof2);
+//			_profiles.add(prof3);
+//			_profiles.add(prof4);
+//			_profiles.add(prof5);
+//			_profiles.add(child1);
+//			_profiles.add(child2);
+//			_profiles.add(child3);
+//			_profiles.add(YoungChild1);
 
 		} catch (Exception ex) {
 			System.out.println(ex.toString());
@@ -54,15 +57,15 @@ public class Driver {
 		return createProfile(name, status, age, null, null);
 	}
 
-	public Boolean createProfile(String name, String status, int age, Adult mum, Adult dad) throws Exception {
+	public Boolean createProfile(String name, String status, int age, Adult mum, Adult dad) throws Exception { //modify later
 		Profile profile = null;
 		if (searchProfile(name) == null) {
 			if (age > 16) {
-				profile = new Adult(name, status, age);
+				profile = new Adult(name, status, status, status, status, age, status);
 			} else if (age <= 16 && age > 2) {
-				profile = new Child(name, status, age, mum, dad);
+				profile = new Child(name, status, status, status, status, age, status, mum, dad);
 			} else {
-				profile = new YoungChild(name, status, age, mum, dad);
+				profile = new YoungChild(name, status, status, status, status, age, status, mum, dad);
 			}
 			_profiles.add(profile);
 			return true;
@@ -84,9 +87,9 @@ public class Driver {
 		}
 	}
 	
-	public Boolean createChild(String name, String status, int age, Adult parent1, Adult parent2) throws Exception {
+	public Boolean createChild(String name, String status, int age, Adult parent1, Adult parent2) throws Exception {  //modify later
 		if (searchProfile(name) == null) {
-			Profile profile = new Child(name, status, age, parent1, parent2);
+			Profile profile = new Child(name, status, status, status, status, age, status, parent1, parent2);
 			_profiles.add(profile);
 			return true;
 		}
@@ -132,6 +135,10 @@ public class Driver {
 	public Set<Profile> listMembers() {
 		return _profiles;
 	}
+	
+	public Collection<Adult> listProfiles() {
+		return datareader.loadProfile();
+	}
 
 	//// displaying profile
 	public String DiplayProfile(String name) {
@@ -156,4 +163,6 @@ public class Driver {
 			return friends;
 		}
 	}
+	
+
 }
