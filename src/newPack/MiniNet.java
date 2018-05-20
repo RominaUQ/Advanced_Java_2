@@ -13,9 +13,7 @@ import java.io.BufferedReader;
 public class MiniNet {
 	public static void main(String[] args) {
 		Boolean showMenu = true;
-		Driver driver = new Driver();
-		
-		
+		Driver driver = new Driver(new DataReader());
 
 		while (showMenu) {
 			try {
@@ -51,17 +49,17 @@ public class MiniNet {
 
 			int input = Integer.parseInt(menu.readLine());
 			System.out.println("You have entered " + input + "\r\n");
-			
+
 			DataReader reader = new DataReader();
 			Set<Profile> profiles;
 			Profile profile = null;
 			Profile profile2 = null;
-			Collection<Adult> collection = reader.loadProfile();
+			Collection<Profile> collection = reader.loadAllProfiles();
 
 			String name;
 			String name1;
 			String name2;
-			
+
 			switch (input) {
 			case 0:
 				System.out.println("Enter the name:");
@@ -129,7 +127,7 @@ public class MiniNet {
 			case 3:///// viewing a persons profile
 				System.out.println("Enter the name:");
 				name = menu.readLine();
-				
+
 				String friendlist = "";
 				profile = driver.searchProfile(name);
 				if (profile != null) {

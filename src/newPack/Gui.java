@@ -30,7 +30,7 @@ public class Gui extends Application {
 	private Button _btnCompare;
 
 	public Gui() {
-		_driver = new Driver();
+		_driver = new Driver(new DataReader());
 		_btnDisplay = new Button("Display");
 		_btnDelete = new Button("Delete");
 		_btnAdd = new Button("Add");
@@ -56,7 +56,7 @@ public class Gui extends Application {
 		root.add(searchText, 9, 1, 4, 2);
 		root.add(btnSearch, 13, 1, 2, 2);
 
-		_names.addAll(_driver.getAllProfiles());
+		_names.addAll(_driver.listProfiles());
 		ListView<Profile> lstNames = new ListView<>(_names);
 		lstNames.setOrientation(Orientation.VERTICAL);
 		lstNames.setPrefSize(300, 200);

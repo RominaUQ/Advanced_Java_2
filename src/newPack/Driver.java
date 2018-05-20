@@ -2,6 +2,11 @@ package newPack;
 
 import exceptions.*;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 ////Author: Aleksey Savran
 import java.util.HashSet;
@@ -11,11 +16,29 @@ import java.util.Set;
 public class Driver {
 
 	private Set<Profile> _profiles = new HashSet<>();
-	private DataReader datareader;
+	DataReader _reader;
+	ArrayList<Profile> _adults;
+	ArrayList<Profile> _children;
+	ArrayList<Profile> _kids;
+	ArrayList<Profile> _allProfiles;
+	private BufferedReader breader;
+
+	public void setBreader(BufferedReader breader) {
+		this.breader = breader;
+	}
+
+	public Driver(DataReader _reader) {
+		this._reader = _reader;
+		_adults = _reader.loadAdults();
+		_children = _reader.loadChildren();
+		_kids = _reader.loadKids();
+		_allProfiles = _reader.loadAllProfiles();
+	}
+
 
 	//// add some object for building the network
-	public Driver() {
-		try {
+//	public Driver() {
+//		try {
 //			Adult prof1 = new Adult("Romina Sharif", "Working at Deloitte", 21);
 //			Adult prof2 = new Adult("Nicholas Brown", "Working at RMIT", 35);
 //			Adult prof3 = new Adult("John Smith", "<3", 29);
@@ -48,11 +71,11 @@ public class Driver {
 //			_profiles.add(child3);
 //			_profiles.add(YoungChild1);
 
-		} catch (Exception ex) {
-			System.out.println(ex.toString());
-		}
+//		} catch (Exception ex) {
+//			System.out.println(ex.toString());
+//		}
 
-	}
+//	}
 
 	/// create a profile method
 	public Boolean createProfile(String name, String status, int age) throws Exception {
@@ -138,8 +161,8 @@ public class Driver {
 		return _profiles;
 	}
 	
-	public Collection<Adult> listProfiles() {
-		return datareader.loadProfile();
+	public Collection<Profile> listProfiles() {
+		return _reader.loadAllProfiles();
 	}
 
 	//// displaying profile
@@ -168,5 +191,121 @@ public class Driver {
 	
 	public Set<Profile> getAllProfiles() {
 		return _profiles;
+	}
+	
+	public DataReader get_reader() {
+		return _reader;
+	}
+
+	public void set_reader(DataReader _reader) {
+		this._reader = _reader;
+	}
+
+	public ArrayList<Profile> get_adults() {
+		return _adults;
+	}
+
+	public void set_adults(ArrayList<Profile> _adults) {
+		this._adults = _adults;
+	}
+
+	public ArrayList<Profile> get_children() {
+		return _children;
+	}
+
+	public void set_children(ArrayList<Profile> _children) {
+		this._children = _children;
+	}
+
+	public ArrayList<Profile> get_kids() {
+		return _kids;
+	}
+
+	public void set_kids(ArrayList<Profile> _kids) {
+		this._kids = _kids;
+	}
+
+	public ArrayList<Profile> get_allProfiles() {
+		return _allProfiles;
+	}
+
+	public void set_allProfiles(ArrayList<Profile> _allProfiles) {
+		this._allProfiles = _allProfiles;
+	}
+
+	public DataReader getReader() {
+		return _reader;
+	}
+
+	public void setReader(DataReader reader) {
+		this._reader = reader;
+	}
+
+	public ArrayList<Profile> getAdults() {
+		return _adults;
+	}
+
+	public void setAdults(ArrayList<Profile> adults) {
+		this._adults = adults;
+	}
+
+	public ArrayList<Profile> getChildren() {
+		return _children;
+	}
+
+	public void setChildren(ArrayList<Profile> children) {
+		this._children = children;
+	}
+
+	public ArrayList<Profile> getKids() {
+		return _kids;
+	}
+
+	public void setKids(ArrayList<Profile> kids) {
+		this._kids = kids;
+	}
+
+	public ArrayList<Profile> getFriends() {
+
+		try {
+			setBreader(new BufferedReader(new FileReader("data/relations.txt")));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
+
+		ArrayList<Profile> friendlist = new ArrayList<>();
+
+		try {
+			String line = breader.readLine();
+			while (line != null) {
+
+				if (line.startsWith("#")) { // Skipping the comment lines
+					line = breader.readLine();
+					continue;
+				}
+
+				String[] tokens = line.split("\\|");
+				String name = tokens[0];
+				String surname = tokens[1];
+				String name2 = tokens[2];
+				String surname2 = tokens[3];
+				String relation = tokens[4];
+
+				for (Profile p : _reader.getAllProfiles()) {
+					if (p.getname().equals(name)) {
+						p._friendlist.add(_reader.searchProfile(name2));
+					}
+				}
+
+				line = breader.readLine();
+
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+		}
+		return friendlist;
 	}
 }
