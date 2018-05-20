@@ -1,5 +1,7 @@
 package newPack;
 
+import java.io.File;
+
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -12,6 +14,8 @@ import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -206,6 +210,10 @@ public class Gui extends Application {
 				Label ageText = new Label(_selectedProfile.getage() + "");
 				Label statusLabel = new Label("Status:");
 				Label statusText = new Label(_selectedProfile.getstatus());
+				
+				//Image image = new Image("data/" + _selectedProfile.get_imagePath());
+			    //ImageView iv = new ImageView(image);
+
 
 				ObservableList<Profile> listoffriends = FXCollections
 						.<Profile>observableArrayList(_selectedProfile.getfriendlist());
@@ -227,6 +235,7 @@ public class Gui extends Application {
 				DisplayPopupGrid.add(statusLabel, 1, 5, 2, 2);
 				DisplayPopupGrid.add(statusText, 3, 5, 2, 2);
 				DisplayPopupGrid.add(_friendlist, 1, 8, 2, 2);
+				//DisplayPopupGrid.add(iv, 1, 11, 2, 2);
 
 				Scene DisplayScene = new Scene(DisplayPopupGrid, 600, 400);
 				DisplayStage.setScene(DisplayScene);

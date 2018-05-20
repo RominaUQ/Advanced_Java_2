@@ -18,7 +18,7 @@ public static void userSearch(String name) {
 			con = DriverManager.getConnection(url);
 			String sql = "Select name, age, status"
 						+ "from users"
-						+ "where Users.name =" + name;";
+						+ "where Users.name =" + name;
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
