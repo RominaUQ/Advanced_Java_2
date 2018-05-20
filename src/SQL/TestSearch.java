@@ -1,4 +1,5 @@
 package SQL;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -6,31 +7,24 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- * @author Savran Aleksei
- * ignore this class
- * for test purpose
+ * @author Savran Aleksei ignore this class for test purpose
  */
 public class TestSearch {
-public static void userSearch(String name, String surname) {
+public static void userSearch(String name) {
 		
 		String url = "jdbc:sqlite:MiniNetDB";
 		Connection con = null;
 		try {
 			con = DriverManager.getConnection(url);
-			String sql = "Select name, surname, age, status"
+			String sql = "Select name, age, status"
 						+ "from users"
-						+ "where Users.name =" + name + "and Users.surname =" + surname + ";";
+						+ "where Users.name =" + name;";
 			Statement stm = con.createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			while (rs.next()) {
 				System.out.println(rs.getString("name") +
-				rs.getString("surname") +
 				rs.getInt("age") +
 				rs.getString("status"));
-//				rs.getString("name");
-//				rs.getString("surname");
-//				rs.getInt("age");
-//				rs.getString("status");
 			}
 		} catch (SQLException e) {
 			System.out.println(e.getMessage()); 
@@ -44,10 +38,10 @@ public static void userSearch(String name, String surname) {
 			}
 		}
 	}
-public static void main(String[] args) {
-	String name = "John";
-	String surname = "Smeet";
-	userSearch(name, surname);
-}
+
+	public static void main(String[] args) {
+		String name = "John Smeet";
+		userSearch(name);
+	}
 
 }

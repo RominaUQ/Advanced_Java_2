@@ -9,7 +9,6 @@ import java.util.Set;
 ///Profile class represent the profile of all adults and superclass for other profile types such as dependents
 public abstract class Profile {
 	protected String _name;
-	protected String _surname;
 	protected String _imagePath;
 	protected String _sex;
 	protected String _state;
@@ -18,9 +17,8 @@ public abstract class Profile {
 	
 	protected Set<Profile> _friendlist = new HashSet<>();
 
-	public Profile(String name, String surname, String imagePath, String status, String sex, int age, String state ) {
+	public Profile(String name, String imagePath, String status, String sex, int age, String state ) {
 		this._name = name;
-		this._surname = surname;
 		this._status = status;
 		this._age = age;
 		this._imagePath = imagePath;
@@ -29,15 +27,6 @@ public abstract class Profile {
 	}
 
 	//// getters and setters
-
-	public String get_surname() {
-		return _surname;
-	}
-
-	public void set_surname(String _surname) {
-		this._surname = _surname;
-	}
-
 	public String get_imagePath() {
 		return _imagePath;
 	}
@@ -113,7 +102,6 @@ public abstract class Profile {
 	public String toString() {
 		String profileString = "";
 		profileString += _name + " ";
-		profileString += _surname + " ";
 		profileString += _imagePath + " ";
 		profileString += _status + " ";
 		profileString += _sex + " ";
@@ -140,9 +128,9 @@ public abstract class Profile {
 			}
 		}
 
-		if (secondProfile.getstatus().equals(this.getstatus())) {
-			return (secondProfile instanceof Adult) ? "Colleagues" : "Classmates";
-		}
+//		if (secondProfile.getstatus().equals(this.getstatus())) {
+//			return (secondProfile instanceof Adult) ? "Colleagues" : "Classmates";
+//		}
 
 		String thirdLevelText = "";
 		boolean isInFriendList = _friendlist.contains(secondProfile);

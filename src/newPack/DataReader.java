@@ -37,16 +37,15 @@ public class DataReader {
 
 				String[] tokens = line.split("\\|");
 				String name = tokens[0];
-				String surname = tokens[1];
-				String imagePath = tokens[2];
-				String status = tokens[3];
-				String sex = tokens[4];
-				String ageT = tokens[5];
+				String imagePath = tokens[1];
+				String status = tokens[2];
+				String sex = tokens[3];
+				String ageT = tokens[4];
 				int age = Integer.parseInt(ageT);
-				String state = tokens[6];
+				String state = tokens[5];
 
 				if (age > 16) {
-					adults.add(new Adult(name, surname, imagePath, status, sex, age, state));
+					adults.add(new Adult(name, imagePath, status, sex, age, state));
 				}
 
 				line = breader.readLine();
@@ -61,7 +60,7 @@ public class DataReader {
 
 	}
 
-	public ArrayList<Profile> loadChildren() {
+	public ArrayList<Profile> loadChildren() throws Exception {
 
 		try {
 			setBreader(new BufferedReader(new FileReader("data/people.txt")));
@@ -84,16 +83,15 @@ public class DataReader {
 
 				String[] tokens = line.split("\\|");
 				String name = tokens[0];
-				String surname = tokens[1];
-				String imagePath = tokens[2];
-				String status = tokens[3];
-				String sex = tokens[4];
-				String ageT = tokens[5];
+				String imagePath = tokens[1];
+				String status = tokens[2];
+				String sex = tokens[3];
+				String ageT = tokens[4];
 				int age = Integer.parseInt(ageT);
-				String state = tokens[6];
+				String state = tokens[5];
 
 				if (age > 2 && age < 17) {
-					children.add(new Child(name, surname, imagePath, status, sex, age, state));
+					children.add(new Child(name, imagePath, status, sex, age, state, null, null));
 				}
 
 				line = breader.readLine();
@@ -107,7 +105,7 @@ public class DataReader {
 
 	}
 
-	public ArrayList<Profile> loadKids() {
+	public ArrayList<Profile> loadKids() throws Exception {
 
 		try {
 			setBreader(new BufferedReader(new FileReader("data/people.txt")));
@@ -129,16 +127,15 @@ public class DataReader {
 
 				String[] tokens = line.split("\\|");
 				String name = tokens[0];
-				String surname = tokens[1];
-				String imagePath = tokens[2];
-				String status = tokens[3];
-				String sex = tokens[4];
-				String ageT = tokens[5];
+				String imagePath = tokens[1];
+				String status = tokens[2];
+				String sex = tokens[3];
+				String ageT = tokens[4];
 				int age = Integer.parseInt(ageT);
-				String state = tokens[6];
+				String state = tokens[5];
 
 				if (age < 3) {
-					kids.add(new YoungChild(name, surname, imagePath, status, sex, age, state));
+					kids.add(new YoungChild(name, imagePath, status, sex, age, state, null, null));
 				}
 
 				line = breader.readLine();
@@ -153,7 +150,7 @@ public class DataReader {
 
 	}
 
-	public ArrayList<Profile> loadAllProfiles() {
+	public ArrayList<Profile> loadAllProfiles() throws Exception {
 
 		try {
 			setBreader(new BufferedReader(new FileReader("data/people.txt")));
@@ -175,20 +172,19 @@ public class DataReader {
 
 				String[] tokens = line.split("\\|");
 				String name = tokens[0];
-				String surname = tokens[1];
-				String imagePath = tokens[2];
-				String status = tokens[3];
-				String sex = tokens[4];
-				String ageT = tokens[5];
+				String imagePath = tokens[1];
+				String status = tokens[2];
+				String sex = tokens[3];
+				String ageT = tokens[4];
 				int age = Integer.parseInt(ageT);
-				String state = tokens[6];
+				String state = tokens[5];
 
 				if (age > 16) {
-					allProfiles.add(new Adult(name, surname, imagePath, status, sex, age, state));
+					allProfiles.add(new Adult(name, imagePath, status, sex, age, state));
 				} else if (age > 3) {
-					allProfiles.add(new Child(name, surname, imagePath, status, sex, age, state));
+					allProfiles.add(new Child(name, imagePath, status, sex, age, state, null, null));
 				} else {
-					allProfiles.add(new YoungChild(name, surname, imagePath, status, sex, age, state));
+					allProfiles.add(new YoungChild(name, imagePath, status, sex, age, state, null, null));
 				}
 				line = breader.readLine();
 
@@ -202,7 +198,7 @@ public class DataReader {
 
 	}
 
-	public ArrayList<Profile> getAllProfiles() {
+	public ArrayList<Profile> getAllProfiles() throws Exception {
 		profiles = null;
 		for (Profile a : loadAdults()) {
 			profiles.add(a);
@@ -216,7 +212,7 @@ public class DataReader {
 		return profiles;
 	}
 
-	public Profile searchProfile(String name) {
+	public Profile searchProfile(String name) throws Exception {
 		Profile searchingProfile = null;
 		for (Profile p : getAllProfiles()) {
 			if (p.getname().equals(name)) {

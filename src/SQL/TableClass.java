@@ -6,12 +6,12 @@ import java.sql.Statement;
 
 /**
  * @author Savran Aleksei
- *This class creates the table with the following arguments: id, name, surname, image, status, sex, age, state. 
+ *This class creates the table with the following arguments: id, name, image, status, sex, age, state. 
  *It's used just for creating a table and not used anywhere in the app.
  */
 public class TableClass {
 	public static void createTable() {
-		String sql = "create table Profiles (id integer primary key, name text not null, surname text not null, "
+		String sql = "create table Profiles (id integer primary key, name text not null, "
 				+ "image BLOB, status text not null, sex text not null, age int not null, state text not null);";
 		String sql2 = "CREATE TABLE relations (id INTEGER REFERENCES Profiles (id) NOT NULL PRIMARY KEY, friendlist STRING, "
 				+ "colleagues STRING, spouse STRING, dependants STRING) WITHOUT ROWID;";

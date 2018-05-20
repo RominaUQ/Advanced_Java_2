@@ -12,6 +12,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import SQL.CreateQueries;
+
 /// all profiles are recorded in  a set
 public class Driver {
 
@@ -28,70 +30,77 @@ public class Driver {
 	}
 
 	public Driver(DataReader _reader) {
-		this._reader = _reader;
-		_adults = _reader.loadAdults();
-		_children = _reader.loadChildren();
-		_kids = _reader.loadKids();
-		_allProfiles = _reader.loadAllProfiles();
+		try {
+			this._reader = _reader;
+			_adults = _reader.loadAdults();
+			_children = _reader.loadChildren();
+			_kids = _reader.loadKids();
+
+			_allProfiles = _reader.loadAllProfiles();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
-
 	//// add some object for building the network
-//	public Driver() {
-//		try {
-//			Adult prof1 = new Adult("Romina Sharif", "Working at Deloitte", 21);
-//			Adult prof2 = new Adult("Nicholas Brown", "Working at RMIT", 35);
-//			Adult prof3 = new Adult("John Smith", "<3", 29);
-//			Adult prof4 = new Adult("Lisa Chan", "nurse at royal hospital", 26);
-//			Adult prof5 = new Adult("Lola Gray", "nurse at royal hospital", 24);
-//
-//			prof1.marry(prof2);
-//			prof2.marry(prof1);
-//			prof4.marry(prof3);
-//			prof3.marry(prof4);
-//
-//			Child child1 = new Child("Honey Brown", "Hi!I am baby", 13, prof1, prof2);
-//			Child child2 = new Child("Sugar Brown", "Weeee", 6, prof1, prof2);
-//			Child child3 = new Child("Rose Daw", "Hi!I am baby", 15, prof3, prof4);
-//			Child YoungChild1 = new YoungChild("Bee Smith", "AWwwww", 2, prof4, prof3);
-//
-//			AddFriend(prof1, prof2);
-//			AddFriend(prof3, prof1);
-//			AddFriend(prof4, prof5);
-//			AddFriend(prof3, prof4);
-//			AddFriend(child1, child3);
-//
-//			_profiles.add(prof1);
-//			_profiles.add(prof2);
-//			_profiles.add(prof3);
-//			_profiles.add(prof4);
-//			_profiles.add(prof5);
-//			_profiles.add(child1);
-//			_profiles.add(child2);
-//			_profiles.add(child3);
-//			_profiles.add(YoungChild1);
+	// public Driver() {
+	// try {
+	// Adult prof1 = new Adult("Romina Sharif", "Working at Deloitte", 21);
+	// Adult prof2 = new Adult("Nicholas Brown", "Working at RMIT", 35);
+	// Adult prof3 = new Adult("John Smith", "<3", 29);
+	// Adult prof4 = new Adult("Lisa Chan", "nurse at royal hospital", 26);
+	// Adult prof5 = new Adult("Lola Gray", "nurse at royal hospital", 24);
+	//
+	// prof1.marry(prof2);
+	// prof2.marry(prof1);
+	// prof4.marry(prof3);
+	// prof3.marry(prof4);
+	//
+	// Child child1 = new Child("Honey Brown", "Hi!I am baby", 13, prof1, prof2);
+	// Child child2 = new Child("Sugar Brown", "Weeee", 6, prof1, prof2);
+	// Child child3 = new Child("Rose Daw", "Hi!I am baby", 15, prof3, prof4);
+	// Child YoungChild1 = new YoungChild("Bee Smith", "AWwwww", 2, prof4, prof3);
+	//
+	// AddFriend(prof1, prof2);
+	// AddFriend(prof3, prof1);
+	// AddFriend(prof4, prof5);
+	// AddFriend(prof3, prof4);
+	// AddFriend(child1, child3);
+	//
+	// _profiles.add(prof1);
+	// _profiles.add(prof2);
+	// _profiles.add(prof3);
+	// _profiles.add(prof4);
+	// _profiles.add(prof5);
+	// _profiles.add(child1);
+	// _profiles.add(child2);
+	// _profiles.add(child3);
+	// _profiles.add(YoungChild1);
 
-//		} catch (Exception ex) {
-//			System.out.println(ex.toString());
-//		}
+	// } catch (Exception ex) {
+	// System.out.println(ex.toString());
+	// }
 
-//	}
+	// }
 
 	/// create a profile method
 	public Boolean createProfile(String name, String status, int age) throws Exception {
 		return createProfile(name, status, age, null, null);
 	}
 
-	public Boolean createProfile(String name, String status, int age, Adult mum, Adult dad) throws Exception { //modify later
+	public Boolean createProfile(String name, String status, int age, Adult mum, Adult dad) throws Exception { // modify
+																												// later
 		Profile profile = null;
 		if (searchProfile(name) == null) {
 			if (age > 16) {
-				profile = new Adult(name, status, status, status, status, age, status);
+				profile = new Adult(name, "data/" + name + ".jpg", status, "", age, status);
 			} else if (age <= 16 && age > 2) {
-				profile = new Child(name, status, status, status, status, age, status, mum, dad);
+				profile = new Child(name, "data/" + name + ".jpg", status, status, age, status, mum, dad);
 			} else {
-				profile = new YoungChild(name, status, status, status, status, age, status, mum, dad);
+				profile = new YoungChild(name, "data/" + name + ".jpg", status, status, age, status, mum, dad);
 			}
+			CreateQueries.createNewUser(name, "data/Frodo.jpg", status, "m", age, "Student");
 			_profiles.add(profile);
 			return true;
 		}
@@ -111,10 +120,11 @@ public class Driver {
 			}
 		}
 	}
-	
-	public Boolean createChild(String name, String status, int age, Adult parent1, Adult parent2) throws Exception {  //modify later
+
+	public Boolean createChild(String name, String status, int age, Adult parent1, Adult parent2) throws Exception { // modify
+																														// later
 		if (searchProfile(name) == null) {
-			Profile profile = new Child(name, status, status, status, status, age, status, parent1, parent2);
+			Profile profile = new Child(name, "data/Frodo.jpg", status, status, age, status, parent1, parent2);
 			_profiles.add(profile);
 			return true;
 		}
@@ -160,8 +170,8 @@ public class Driver {
 	public Set<Profile> listMembers() {
 		return _profiles;
 	}
-	
-	public Collection<Profile> listProfiles() {
+
+	public Collection<Profile> listProfiles() throws Exception {
 		return _reader.loadAllProfiles();
 	}
 
@@ -188,11 +198,11 @@ public class Driver {
 			return friends;
 		}
 	}
-	
+
 	public Set<Profile> getAllProfiles() {
 		return _profiles;
 	}
-	
+
 	public DataReader get_reader() {
 		return _reader;
 	}
@@ -265,7 +275,7 @@ public class Driver {
 		this._kids = kids;
 	}
 
-	public ArrayList<Profile> getFriends() {
+	public ArrayList<Profile> getFriends() throws Exception {
 
 		try {
 			setBreader(new BufferedReader(new FileReader("data/relations.txt")));
@@ -287,9 +297,7 @@ public class Driver {
 
 				String[] tokens = line.split("\\|");
 				String name = tokens[0];
-				String surname = tokens[1];
-				String name2 = tokens[2];
-				String surname2 = tokens[3];
+				String name2 = tokens[1];
 				String relation = tokens[4];
 
 				for (Profile p : _reader.getAllProfiles()) {

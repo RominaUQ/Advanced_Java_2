@@ -13,8 +13,8 @@ public class Adult extends Profile {
 //		super(name, status, age);
 //	}
 	
-	public Adult(String name, String surname, String imagePath, String status, String sex, Integer age, String state) {
-		super(name, surname, imagePath, status, sex, age, state);
+	public Adult(String name, String imagePath, String status, String sex, Integer age, String state) {
+		super(name, imagePath, status, sex, age, state);
 	}
 
 

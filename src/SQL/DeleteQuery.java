@@ -10,17 +10,15 @@ import java.sql.SQLException;
  *This class implements deleting of the user
  */
 public class DeleteQuery {
-public static void userDelete(String name, String surname) {
-		
+public static void userDelete(String name) {
 		String url = "jdbc:sqlite:MiniNetDB";
 		Connection con = null;
 		try {
 			con = DriverManager.getConnection(url);
 			String sql = "Delete * from Users"
-					+ "where name = ? and surname = ?;";
+					+ "where name = ?;";
 			PreparedStatement pstmn = con.prepareStatement(sql);
 			pstmn.setString(1, name);
-			pstmn.setString(2, surname);
 			ResultSet rs = pstmn.executeQuery();
 		
 		} catch (SQLException e) {
@@ -36,9 +34,8 @@ public static void userDelete(String name, String surname) {
 		}
 	}
 public static void main(String[] args) {
-	String name = "John";
-	String surname = "Smeet";
-	userDelete(name, surname);
+	String name = "John Smeet";
+	userDelete(name);
 }
 
 }

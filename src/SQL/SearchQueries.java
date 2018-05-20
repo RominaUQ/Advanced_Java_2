@@ -14,17 +14,16 @@ import java.sql.SQLException;
  * @author Savran Aleksei This class implements search function
  */
 public class SearchQueries {
-	public static void userSearch(String name, String surname) throws IOException {
+	public static void userSearch(String name) throws IOException {
 
 		String url = "jdbc:sqlite:MiniDB.db";
 		Connection con = null;
 		FileOutputStream fos = null;
 		try {
 			con = DriverManager.getConnection(url);
-			String sql = "Select * from Profiles where " + "name = ? " + "and surname = ?";
+			String sql = "Select * from Profiles where " + "name = ?";
 			PreparedStatement pstmn = con.prepareStatement(sql);
 			pstmn.setString(1, name);
-			pstmn.setString(2, surname);
 
 			ResultSet rs = pstmn.executeQuery();
 
@@ -38,7 +37,7 @@ public class SearchQueries {
 				while (is.read(buffer) > 0) {
 					fos.write(buffer);
 				}
-				System.out.println(rs.getString("name") + "\t" + rs.getString("surname") + "\t" + rs.getInt("age")
+				System.out.println(rs.getString("name") + "\t" + rs.getInt("age")
 						+ "\t" + rs.getString("status"));
 			}
 		} catch (SQLException e) {
@@ -55,9 +54,8 @@ public class SearchQueries {
 	}
 
 	public static void main(String[] args) throws IOException {
-		String name = "Gollum";
-		String surname = "Smeagol";
-		userSearch(name, surname);
+		String name = "Gollum Smeagol";
+		userSearch(name);
 	}
 
 }
