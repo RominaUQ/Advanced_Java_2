@@ -1,3 +1,5 @@
+package newPack;
+
 import exceptions.*;
 
 public class YoungChild extends Child {
