@@ -1,4 +1,4 @@
-package newPack;
+package gui;
 
 import exceptions.*;
 

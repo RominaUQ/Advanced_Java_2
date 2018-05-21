@@ -1,4 +1,4 @@
-package newPack;
+package gui;
 
 ////Author: Romina Sharifpour
 //package assignment2;

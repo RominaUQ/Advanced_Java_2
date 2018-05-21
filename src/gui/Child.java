@@ -1,4 +1,4 @@
-package newPack;
+package gui;
 
 ////Author: Aleksey Savran
 
@@ -22,16 +22,18 @@ public class Child extends Profile {
 		this._parent2 = DadParent;
 
 		if (MumParent == null || DadParent == null || !MumParent.getSpouse().equals(DadParent)) {
-			throw new NoParentException("A Child can only be one couple dependent, including not only one parent");
-		}
-		try {
-			this.addfriend(DadParent, true);
-			this.addfriend(MumParent, true);
+			// throw new NoParentException("A Child can only be one couple
+			// dependent, including not only one parent");
+		} else {
+			try {
+				this.addfriend(DadParent, true);
+				this.addfriend(MumParent, true);
 
-			this._parent1.addfriend(this, true);
-			this._parent2.addfriend(this, true);
-		} catch (Exception ex) {
+				this._parent1.addfriend(this, true);
+				this._parent2.addfriend(this, true);
+			} catch (Exception ex) {
 
+			}
 		}
 	}
 
@@ -44,7 +46,8 @@ public class Child extends Profile {
 		}
 
 		// if (profile.getage() <= 2 && this.getage() <= 2) {
-		// System.out.println("Younger than two year old, can not have any friend");
+		// System.out.println("Younger than two year old, can not have any
+		// friend");
 		// return false;
 		// }
 
@@ -77,6 +80,14 @@ public class Child extends Profile {
 	public String getDadname() {
 		return _parent2.getname();
 
+	}
+
+	public void setDad(Adult _parent1) {
+		this._parent1 = _parent1;
+	}
+
+	public void setMum(Adult _parent2) {
+		this._parent2 = _parent2;
 	}
 
 	public void setclassmate(Set<Child> classmate) {

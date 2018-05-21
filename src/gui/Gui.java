@@ -1,4 +1,4 @@
-package newPack;
+package gui;
 
 import java.io.File;
 
@@ -39,7 +39,7 @@ public class Gui extends Application {
 		_btnDelete = new Button("Delete");
 		_btnAdd = new Button("Add");
 		_btnCompare = new Button("Compare");
-		
+
 		_names = FXCollections.<Profile>observableArrayList();
 	}
 
@@ -90,7 +90,7 @@ public class Gui extends Application {
 		setDeleteButtonAction();
 		setDisplayButtonAction(primaryStage);
 		setCompareButtonAction(primaryStage, lstNames.getSelectionModel().getSelectedItems());
-		
+
 		root.setPadding(new Insets(30));
 		Scene scene = new Scene(root, 800, 600);
 		primaryStage.setTitle("Menu");
@@ -210,10 +210,14 @@ public class Gui extends Application {
 				Label ageText = new Label(_selectedProfile.getage() + "");
 				Label statusLabel = new Label("Status:");
 				Label statusText = new Label(_selectedProfile.getstatus());
-				
-				//Image image = new Image("data/" + _selectedProfile.get_imagePath());
-			    //ImageView iv = new ImageView(image);
 
+				Image image = null;
+				try {
+					image = new Image("/resources/" + _selectedProfile.get_imagePath());
+				} catch (IllegalArgumentException ex) {
+					image = new Image("/resources/noimagefound.jpg");
+				}
+				ImageView iv = new ImageView(image);
 
 				ObservableList<Profile> listoffriends = FXCollections
 						.<Profile>observableArrayList(_selectedProfile.getfriendlist());
@@ -235,7 +239,7 @@ public class Gui extends Application {
 				DisplayPopupGrid.add(statusLabel, 1, 5, 2, 2);
 				DisplayPopupGrid.add(statusText, 3, 5, 2, 2);
 				DisplayPopupGrid.add(_friendlist, 1, 8, 2, 2);
-				//DisplayPopupGrid.add(iv, 1, 11, 2, 2);
+				DisplayPopupGrid.add(iv, 1, 11, 2, 2);
 
 				Scene DisplayScene = new Scene(DisplayPopupGrid, 600, 400);
 				DisplayStage.setScene(DisplayScene);
@@ -252,9 +256,9 @@ public class Gui extends Application {
 				DisplayStage.initModality(Modality.APPLICATION_MODAL);
 				DisplayStage.initOwner(primaryStage);
 				DisplayStage.setTitle("Profile Display");
-				
+
 				Profile firstProfile = selectedProfiles.get(0);
-				
+
 				GridPane compareGrid = new GridPane();
 
 				Label header = new Label("Profile 1:");
@@ -264,7 +268,7 @@ public class Gui extends Application {
 				Label ageText = new Label(firstProfile.getage() + "");
 				Label statusLabel = new Label("Status:");
 				Label statusText = new Label(firstProfile.getstatus());
-				
+
 				compareGrid.add(header, 1, 1, 2, 2);
 				compareGrid.add(nameLabel, 1, 3, 2, 2);
 				compareGrid.add(nameText, 3, 3, 2, 2);
@@ -273,9 +277,8 @@ public class Gui extends Application {
 				compareGrid.add(statusLabel, 1, 7, 2, 2);
 				compareGrid.add(statusText, 3, 7, 2, 2);
 
-				
 				Profile secondProfile = selectedProfiles.get(1);
-				
+
 				Label secondProfileHeader = new Label("Profile 2:");
 				Label secondProfileNameLabel = new Label("Name:");
 				Label secondProfileNameText = new Label(secondProfile.getname());
@@ -283,7 +286,7 @@ public class Gui extends Application {
 				Label secondProfileAgeText = new Label(secondProfile.getage() + "");
 				Label secondProfileStatusLabel = new Label("Status:");
 				Label secondProfileStatusText = new Label(secondProfile.getstatus());
-				
+
 				compareGrid.add(secondProfileHeader, 8, 1, 2, 2);
 				compareGrid.add(secondProfileNameLabel, 8, 3, 2, 2);
 				compareGrid.add(secondProfileNameText, 10, 3, 2, 2);
@@ -291,13 +294,12 @@ public class Gui extends Application {
 				compareGrid.add(secondProfileAgeText, 10, 5, 2, 2);
 				compareGrid.add(secondProfileStatusLabel, 8, 7, 2, 2);
 				compareGrid.add(secondProfileStatusText, 10, 7, 2, 2);
-				
+
 				Label relationshipTypeLabel = new Label("Relationship Type:");
 				Label relationshipTypeText = new Label(firstProfile.getRelationship(secondProfile));
-				
+
 				compareGrid.add(relationshipTypeLabel, 1, 12, 2, 2);
 				compareGrid.add(relationshipTypeText, 3, 12, 2, 2);
-
 
 				Scene DisplayScene = new Scene(compareGrid, 600, 400);
 				DisplayStage.setScene(DisplayScene);

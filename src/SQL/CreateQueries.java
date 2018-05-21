@@ -17,7 +17,7 @@ import java.sql.SQLException;
 public class CreateQueries {
 	private static FileInputStream fis;
 
-	public static void createNewUser(String name, String filename, String status, String sex, int age, String state)
+	public static void createNewUser(String name, String status, String sex, int age, String state)
 			throws ClassNotFoundException {
 		Class.forName("org.sqlite.JDBC");
 		String url = "jdbc:sqlite:MiniDB.db";
@@ -27,7 +27,7 @@ public class CreateQueries {
 			String sql = "insert into Profiles (name, image, status, sex, age, state) values (?,?,?,?,?,?);";
 			PreparedStatement pstmn = con.prepareStatement(sql);
 			pstmn.setString(1, name);
-			pstmn.setBytes(2, readFile(filename));
+			pstmn.setBytes(2, readFile("data/noimagefound.jpg"));
 			pstmn.setString(3, status);
 			pstmn.setString(4, sex);
 			pstmn.setInt(5, age);
@@ -49,6 +49,62 @@ public class CreateQueries {
 		}
 	}
 
+	public static void addFriend(String name, String name2, String relation) throws ClassNotFoundException {
+		Class.forName("org.sqlite.JDBC");
+		String url = "jdbc:sqlite:MiniDB.db";
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(url);
+			String sql = "insert into relations (profile1, profile2, relation) values (?,?,?);";
+			PreparedStatement pstmn = con.prepareStatement(sql);
+			pstmn.setString(1, name);
+			pstmn.setString(2, name2);
+			pstmn.setString(3, relation);
+			pstmn.execute();
+			con.commit();
+
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		} finally {
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException e2) {
+					System.out.println(e2.getMessage());
+				}
+			}
+		}
+	}
+
+	// public static void addColleagues(String name, String name2) throws
+	// ClassNotFoundException {
+	// Class.forName("org.sqlite.JDBC");
+	// String url = "jdbc:sqlite:MiniDB.db";
+	// Connection con = null;
+	// try {
+	// con = DriverManager.getConnection(url);
+	// String sql = "update relations set id = ?, colleagues = ?;";
+	// PreparedStatement pstmn = con.prepareStatement(sql);
+	// int prID = SearchQueries.getUserID(name);
+	//
+	// pstmn.setInt(1, prID);
+	// pstmn.setString(2, name2);
+	// pstmn.execute();
+	// con.commit();
+	//
+	// } catch (SQLException e) {
+	// System.out.println(e.getMessage());
+	// } finally {
+	// if (con != null) {
+	// try {
+	// con.close();
+	// } catch (SQLException e2) {
+	// System.out.println(e2.getMessage());
+	// }
+	// }
+	// }
+	// }
+
 	private static byte[] readFile(String file) {
 		ByteArrayOutputStream baos = null;
 		try {
@@ -68,10 +124,4 @@ public class CreateQueries {
 
 		return baos != null ? baos.toByteArray() : null;
 	}
-
-	public static void main(String[] args) throws ClassNotFoundException {
-
-		createNewUser("Bilbo Baggins", "data/Bilbo.jpg", "retired", "M", 50, "Shire");
-	}
-
 }
