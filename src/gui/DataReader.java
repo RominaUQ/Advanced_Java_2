@@ -6,6 +6,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import exceptions.NotToBeCoupledException;
+
 public class DataReader {
 
 	private BufferedReader breader;
@@ -286,11 +288,14 @@ public class DataReader {
 				if (relation == "Couple") {
 					for (Profile p : loadAdults()) {
 						if (p.getname().equals(name)) {
-							if (p instanceof Adult) {
-								((Adult) p).marry(searchAdultProfile(name2));
-								searchAdultProfile(name2).marry((Adult) p);
-								((Adult) p).addfriend(searchAdultProfile(name2), true);
-								searchAdultProfile(name2).addfriend(p, true);
+							Adult otherAdult = searchAdultProfile(name2);
+							if (p instanceof Adult && otherAdult != null) {
+								((Adult) p).marry(otherAdult);
+								otherAdult.marry((Adult) p);
+								((Adult) p).addfriend(otherAdult, true);
+								otherAdult.addfriend(p, true);
+							} else {
+								throw new NotToBeCoupledException("Only adults can marry");
 							}
 							break;
 						}
@@ -300,7 +305,9 @@ public class DataReader {
 				line = breader.readLine();
 			}
 
-		} catch (IOException e) {
+		} catch (
+
+		IOException e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
 		}

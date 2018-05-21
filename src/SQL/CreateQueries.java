@@ -27,7 +27,7 @@ public class CreateQueries {
 			String sql = "insert into Profiles (name, image, status, sex, age, state) values (?,?,?,?,?,?);";
 			PreparedStatement pstmn = con.prepareStatement(sql);
 			pstmn.setString(1, name);
-			pstmn.setBytes(2, readFile("data/noimagefound.jpg"));
+			pstmn.setBytes(2, readFile("src/resources/noimagefound.jpg"));
 			pstmn.setString(3, status);
 			pstmn.setString(4, sex);
 			pstmn.setInt(5, age);
