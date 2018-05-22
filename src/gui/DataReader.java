@@ -1,5 +1,10 @@
 package gui;
 
+/**
+ * This class handles file reading
+ * @author Savran Aleksei 
+ */
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;

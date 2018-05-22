@@ -1,5 +1,10 @@
 package gui;
 
+/**
+ * This defines a relationship with another profile.
+ * @author Romina Sharifpour
+ */
+
 public class Relation {
 	protected String _name;
 	protected String _relationType;

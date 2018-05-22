@@ -1,12 +1,12 @@
 package gui;
 
+/**
+ * This class handles communication between the GUI and the database.
+ * @author Romina Sharifpour
+ */
+
 import exceptions.*;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;

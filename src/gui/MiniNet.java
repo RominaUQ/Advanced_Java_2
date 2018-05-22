@@ -1,6 +1,9 @@
 package gui;
 
-////Author: Romina Sharifpour
+/**
+ * This class creates the console GUI.
+ * @author Romina Sharifpour
+ */
 
 import java.io.IOException;
 import java.io.InputStreamReader;

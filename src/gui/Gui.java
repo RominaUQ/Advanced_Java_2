@@ -1,5 +1,10 @@
 package gui;
 
+/**
+ * This class creates the GUI.
+ * @author Romina Sharifpour
+ */
+
 import SQL.*;
 
 import javafx.application.Application;
@@ -281,12 +286,6 @@ public class Gui extends Application {
 				ListView<Relation> _friendlist = new ListView<>(listOfFriends);
 				_friendlist.setOrientation(Orientation.VERTICAL);
 				_friendlist.setPrefSize(150, 100);
-				_friendlist.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Relation>() {
-					public void changed(ObservableValue<? extends Relation> ov, final Relation oldvalue,
-							final Relation newvalue) {
-						// _selectedProfile = newvalue;
-					}
-				});
 
 				DisplayPopupGrid.add(nameLabel, 1, 1, 2, 2);
 				DisplayPopupGrid.add(nameText, 5, 1, 2, 2);

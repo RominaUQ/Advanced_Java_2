@@ -1,5 +1,10 @@
 package gui;
 
+/**
+ * The Young Child extends the Child class.
+ * @author Romina Sharifpour
+ */
+
 import exceptions.*;
 
 public class YoungChild extends Child {

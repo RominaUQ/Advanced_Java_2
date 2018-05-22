@@ -1,5 +1,10 @@
 package gui;
 
+/**
+ * This is an Adult class, extending the Profile abstract class.
+ * @author Romina Sharifpour
+ */
+
 import java.util.HashSet;
 import exceptions.*;
 import java.util.Set;

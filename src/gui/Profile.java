@@ -1,7 +1,9 @@
 package gui;
 
-////Author: Romina Sharifpour
-//package assignment2;
+/**
+ * This is the abstract Profile class, containing generic implementations and functions as an interface for child objects.
+ * @author Romina Sharifpour
+ */
 
 import java.util.HashSet;
 import java.util.Set;
@@ -113,7 +115,8 @@ public abstract class Profile {
 			Set<Relation> friendsRelations = SearchQueries.getRelationsForUser(relation.getName());
 			for (Relation friendsRelation : friendsRelations) {
 				if (friendsRelation.getName().equals(this.getname())) {
-					return "Friend of Friend";
+					return "Friend of Friend (" + this.getname() + " - " + relation.getName() + " - "
+							+ friendsRelation.getName() + ")";
 				}
 			}
 		}

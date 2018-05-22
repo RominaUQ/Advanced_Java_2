@@ -1,6 +1,9 @@
 package gui;
 
-////Author: Aleksey Savran
+/**
+ * This is a Child class, extending the Profile abstract class.
+ * @author Romina Sharifpour
+ */
 
 import java.util.HashSet;
 import exceptions.*;
