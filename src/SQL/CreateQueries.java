@@ -3,8 +3,6 @@ package SQL;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -63,7 +61,7 @@ public class CreateQueries {
 			pstmn.execute();
 			con.commit();
 
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		} finally {
 			if (con != null) {
@@ -116,10 +114,8 @@ public class CreateQueries {
 				baos.write(buffer, 0, len);
 
 			}
-		} catch (FileNotFoundException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
 		}
 
 		return baos != null ? baos.toByteArray() : null;

@@ -18,22 +18,15 @@ public class Child extends Profile {
 			Adult DadParent) throws Exception {
 		super(name, imagePath, status, sex, age, state);
 
-		this._parent1 = MumParent;
-		this._parent2 = DadParent;
+		if (MumParent != null && DadParent != null) {
+			this._parent1 = MumParent;
+			this._parent2 = DadParent;
 
-		if (MumParent == null || DadParent == null || !MumParent.getSpouse().equals(DadParent)) {
-			// throw new NoParentException("A Child can only be one couple
-			// dependent, including not only one parent");
-		} else {
-			try {
-				this.addfriend(DadParent, true);
-				this.addfriend(MumParent, true);
+			this.addfriend(DadParent, true);
+			this.addfriend(MumParent, true);
 
-				this._parent1.addfriend(this, true);
-				this._parent2.addfriend(this, true);
-			} catch (Exception ex) {
-
-			}
+			this._parent1.addfriend(this, true);
+			this._parent2.addfriend(this, true);
 		}
 	}
 

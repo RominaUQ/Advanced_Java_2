@@ -1,6 +1,5 @@
 package SQL;
 
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -17,7 +16,8 @@ import gui.*;
  * @author Savran Aleksei This class implements search function
  */
 public class SearchQueries {
-	public static Profile userSearch(String name) throws Exception {
+	public static Profile userSearch(String name) {
+
 		Profile pr = null;
 		String url = "jdbc:sqlite:MiniDB.db";
 		Connection con = null;
@@ -61,7 +61,7 @@ public class SearchQueries {
 				}
 
 			}
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		} finally {
 			if (con != null) {
@@ -76,7 +76,7 @@ public class SearchQueries {
 		return pr;
 	}
 
-	public static Profile userSearchImage(String name) throws Exception {
+	public static Profile userSearchImage(String name) {
 		Profile pr = null;
 		String url = "jdbc:sqlite:MiniDB.db";
 		Connection con = null;
@@ -120,7 +120,7 @@ public class SearchQueries {
 				}
 
 			}
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		} finally {
 			if (con != null) {

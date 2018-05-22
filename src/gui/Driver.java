@@ -8,11 +8,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-////Author: Aleksey Savran
 import java.util.HashSet;
 import java.util.Set;
 
 import SQL.CreateQueries;
+import SQL.DeleteQuery;
+import SQL.SearchQueries;
 import SQL.ShowAllUsers;
 
 /// all profiles are recorded in  a set
@@ -33,19 +34,17 @@ public class Driver {
 	public Driver(DataReader _reader) {
 		try {
 			this._reader = _reader;
-			_adults = _reader.loadAdults();
-			_children = _reader.loadChildren();
-			_kids = _reader.loadKids();
+			// _adults = _reader.loadAdults();
+			// _children = _reader.loadChildren();
+			// _kids = _reader.loadKids();
 
-			_allProfiles = _reader.loadAllProfiles();
+			// _allProfiles = _reader.loadAllProfiles();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-
-	
 	//// add some object for building the network
 	// public Driver() {
 	// try {
@@ -60,10 +59,12 @@ public class Driver {
 	// prof4.marry(prof3);
 	// prof3.marry(prof4);
 	//
-	// Child child1 = new Child("Honey Brown", "Hi!I am baby", 13, prof1, prof2);
+	// Child child1 = new Child("Honey Brown", "Hi!I am baby", 13, prof1,
+	//// prof2);
 	// Child child2 = new Child("Sugar Brown", "Weeee", 6, prof1, prof2);
 	// Child child3 = new Child("Rose Daw", "Hi!I am baby", 15, prof3, prof4);
-	// Child YoungChild1 = new YoungChild("Bee Smith", "AWwwww", 2, prof4, prof3);
+	// Child YoungChild1 = new YoungChild("Bee Smith", "AWwwww", 2, prof4,
+	//// prof3);
 	//
 	// AddFriend(prof1, prof2);
 	// AddFriend(prof3, prof1);
@@ -88,22 +89,32 @@ public class Driver {
 	// }
 
 	/// create a profile method
-	public Boolean createProfile(String name, String status, int age) throws Exception {
-		return createProfile(name, status, age, null, null);
+	public Boolean createProfile(String name, String status, String sex, int age, String state) throws Exception {
+		return createProfile(name, status, sex, age, state, null, null);
 	}
 
-	public Boolean createProfile(String name, String status, int age, Adult mum, Adult dad) throws Exception { // modify
-																												// later
+	public Boolean createProfile(String name, String status, String sex, int age, String state, String mumName,
+			String dadName) throws Exception {
 		Profile profile = null;
 		if (searchProfile(name) == null) {
 			if (age > 16) {
-				profile = new Adult(name, "data/" + name + ".jpg", status, "", age, status);
-			} else if (age <= 16 && age > 2) {
-				profile = new Child(name, "data/" + name + ".jpg", status, status, age, status, mum, dad);
+				profile = new Adult(name, name + ".jpg", status, sex, age, status);
 			} else {
-				profile = new YoungChild(name, "data/" + name + ".jpg", status, status, age, status, mum, dad);
+				Adult mum = (Adult) searchProfile(mumName);
+				Adult dad = (Adult) searchProfile(dadName);
+
+				if (mum == null || dad == null) {
+					throw new NoParentException(
+							"A Child can only be one couple dependent, including not only one parent");
+				}
+
+				if (age > 2) {
+					profile = new Child(name, name + ".jpg", status, sex, age, state, mum, dad);
+				} else {
+					profile = new YoungChild(name, name + ".jpg", status, sex, age, state, mum, dad);
+				}
 			}
-			CreateQueries.createNewUser(name, status, "m", age, "Student"); 
+			CreateQueries.createNewUser(name, status, sex, age, state);
 			_profiles.add(profile);
 			return true;
 		}
@@ -115,6 +126,7 @@ public class Driver {
 		if (profile.isParent()) {
 			throw new NoParentException("Parent profile can not be deleted, because it has a connected child");
 		} else {
+			DeleteQuery.userDelete(name);
 			_profiles.remove(profile);
 			for (Profile otherProfile : profile.getfriendlist()) {
 				if (otherProfile.getfriendlist().contains(profile)) {
@@ -124,15 +136,17 @@ public class Driver {
 		}
 	}
 
-	public Boolean createChild(String name, String status, int age, Adult parent1, Adult parent2) throws Exception { // modify
-																														// later
-		if (searchProfile(name) == null) {
-			Profile profile = new Child(name, "data/Frodo.jpg", status, status, age, status, parent1, parent2);
-			_profiles.add(profile);
-			return true;
-		}
-		return false;
-	}
+	// public Boolean createChild(String name, String status, int age, Adult
+	// parent1, Adult parent2) throws Exception { // modify
+	// // later
+	// if (searchProfile(name) == null) {
+	// Profile profile = new Child(name, "data/Frodo.jpg", status, status, age,
+	// status, parent1, parent2);
+	// _profiles.add(profile);
+	// return true;
+	// }
+	// return false;
+	// }
 
 	/// connect two profiles
 	public Boolean AddFriend(Profile profile1, Profile profile2) throws Exception {
@@ -152,12 +166,8 @@ public class Driver {
 
 	/// look up a profile
 	public Profile searchProfile(String name) {
-		for (Profile p : _profiles) {
-			if (p.getname().equals(name)) {
-				return p;
-			}
-		}
-		return null;
+		Profile profile = SearchQueries.userSearch(name);
+		return profile;
 	}
 
 	/// Showing dependencies
@@ -203,7 +213,7 @@ public class Driver {
 	}
 
 	public Set<Profile> getAllProfiles() {
-		return _profiles;
+		return ShowAllUsers.userShowAll();
 	}
 
 	public DataReader get_reader() {
@@ -302,7 +312,7 @@ public class Driver {
 				String name = tokens[0];
 				String name2 = tokens[1];
 				String relation = tokens[2];
-				
+
 				if (relation == "Friends") {
 					for (Profile p : _reader.getAllProfiles()) {
 						if (p.getname().equals(name)) {

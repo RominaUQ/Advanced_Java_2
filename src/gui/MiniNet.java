@@ -4,7 +4,6 @@ package gui;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.Collection;
 import java.util.Set;
 import java.io.BufferedReader;
@@ -73,7 +72,7 @@ public class MiniNet {
 
 				Boolean success = false;
 				if (age > 16) {
-					success = driver.createProfile(name, status, age);
+					//success = driver.createProfile(name, status, age);
 				} else {
 					System.out.println("Enter the dad's name");
 					String nameDad = menu.readLine();
@@ -87,7 +86,7 @@ public class MiniNet {
 						Profile parent2 = driver.searchProfile(nameMom);
 
 						if (parent2 != null) {
-							success = driver.createChild(name, status, age, (Adult) parent1, (Adult) parent2);
+							//success = driver.createChild(name, status, age, (Adult) parent1, (Adult) parent2);
 						} else {
 							System.out.println("Profile " + nameMom + " doesn't exist");
 						}

@@ -1,7 +1,5 @@
 package gui;
 
-import java.io.File;
-
 import SQL.*;
 
 import javafx.application.Application;
@@ -18,7 +16,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -68,8 +65,8 @@ public class Gui extends Application {
 		root.add(btnSearch, 17, 1, 2, 3);
 		_btnCompare.setMinWidth(100);
 
-		// _names.addAll(_driver.listProfiles());
-		_names.addAll(ShowAllUsers.userShowAll());
+		_names.addAll(_driver.getAllProfiles());
+		
 		ListView<Profile> lstNames = new ListView<>(_names);
 		lstNames.setOrientation(Orientation.VERTICAL);
 		lstNames.setPrefSize(300, 350);
@@ -95,7 +92,6 @@ public class Gui extends Application {
 		root.setVgap(10);
 
 		setAddButtonAction(primaryStage);
-		setSearchButtonAction(btnSearch, searchText);
 		setDeleteButtonAction();
 		setDisplayButtonAction(primaryStage);
 		setCompareButtonAction(primaryStage, lstNames.getSelectionModel().getSelectedItems());
@@ -176,15 +172,13 @@ public class Gui extends Application {
 						Boolean success = false;
 						try {
 							int age = Integer.parseInt(ageText.getText());
-							// success =
-							// _driver.createProfile(nameText.getText(),
-							// statusText.getText(), age);
-							CreateQueries.createNewUser(nameText.getText(), statusText.getText(), sexText.getText(),
-									age, stateText.getText());
+							success = _driver.createProfile(nameText.getText(), statusText.getText(), sexText.getText(), age, stateText.getText(), momNameText.getText(), dadNameText.getText());
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
 						if (success) {
+							_names.clear();
+							_names.addAll(ShowAllUsers.userShowAll());
 							dialogStage.close();
 						}
 					}
@@ -198,24 +192,6 @@ public class Gui extends Application {
 				Scene dialogScene = new Scene(addPopupGrid, 600, 400);
 				dialogStage.setScene(dialogScene);
 				dialogStage.show();
-			}
-		});
-	}
-
-	private void setSearchButtonAction(Button search, TextField searchText) {
-		search.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				Profile profile;
-				try {
-					profile = SearchQueries.userSearch(searchText.getText());
-					if (profile != null) {
-						_names.add(profile);
-					}
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 			}
 		});
 	}
@@ -359,7 +335,7 @@ public class Gui extends Application {
 			public void handle(ActionEvent event) {
 				try {
 					if (_selectedProfile != null) {
-						DeleteQuery.userDelete(_selectedProfile.getname());
+						_driver.DeleteProfile(_selectedProfile.getname());
 						_names.remove(_selectedProfile);
 						_selectedProfile = null;
 					}
