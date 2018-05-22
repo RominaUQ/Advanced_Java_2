@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import exceptions.NotToBeCoupledException;
 
@@ -12,6 +14,9 @@ public class DataReader {
 
 	private BufferedReader breader;
 	private ArrayList<Profile> profiles;
+	private String relation;
+	private Object name;
+	private String name2;
 
 	public void setBreader(BufferedReader breader) {
 		this.breader = breader;
@@ -432,11 +437,25 @@ public class DataReader {
 				line = breader.readLine();
 
 			}
-
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
 		}
 
 	}
+
+	public String getrelationship(Profile profile1, Profile profile2) {
+		String relationship = "";
+
+		if (this.name.equals(profile1.getname()) && this.name2.equals(profile2.getname())) {
+			relationship = relation;
+		}
+		return relationship;
+	}
+
+	/*
+	 * Set<relationship> relationship = new HashSet<relationship>(); private
+	 * String _name; private String _name2; private String _relation;
+	 */
+
 }

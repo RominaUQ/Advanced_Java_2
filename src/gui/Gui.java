@@ -18,6 +18,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -49,24 +50,29 @@ public class Gui extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		GridPane root = new GridPane();
 
-		root.add(_btnDisplay, 1, 1, 2, 2);
-		root.add(_btnDelete, 1, 5, 2, 2);
-		root.add(_btnAdd, 1, 10, 2, 2);
-		root.add(_btnCompare, 1, 12, 2, 2);
+		root.add(_btnDisplay, 1, 3, 5, 3);
+		root.add(_btnDelete, 1, 8, 5, 3);
+		root.add(_btnAdd, 1, 13, 5, 3);
+		root.add(_btnCompare, 1, 18, 5, 3);
 		root.setAlignment(Pos.TOP_LEFT);
+		_btnDisplay.setMinWidth(100);
+		_btnDelete.setMinWidth(100);
+		_btnAdd.setMinWidth(100);
+		_btnCompare.setMinWidth(100);
 
-		Label searchLabel = new Label("search the profile");
+		Label searchLabel = new Label("Search a Profile");
 		TextField searchText = new TextField();
 		Button btnSearch = new Button("Search");
-		root.add(searchLabel, 7, 1, 2, 2);
-		root.add(searchText, 9, 1, 4, 2);
-		root.add(btnSearch, 13, 1, 2, 2);
+		root.add(searchLabel, 11, 2, 1, 1);
+		root.add(searchText, 12, 1, 5, 3);
+		root.add(btnSearch, 17, 1, 2, 3);
+		_btnCompare.setMinWidth(100);
 
 		// _names.addAll(_driver.listProfiles());
 		_names.addAll(ShowAllUsers.userShowAll());
 		ListView<Profile> lstNames = new ListView<>(_names);
 		lstNames.setOrientation(Orientation.VERTICAL);
-		lstNames.setPrefSize(300, 200);
+		lstNames.setPrefSize(300, 350);
 		lstNames.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		lstNames.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Profile>() {
 			@Override
@@ -83,7 +89,7 @@ public class Gui extends Application {
 			}
 		});
 
-		root.add(lstNames, 7, 3, 2, 2);
+		root.add(lstNames, 11, 3, 9, 20);
 
 		root.setHgap(10);
 		root.setVgap(10);
@@ -232,20 +238,14 @@ public class Gui extends Application {
 				Label statusLabel = new Label("Status:");
 				Label statusText = new Label(_selectedProfile.getstatus());
 
-				Image image = null;
-				try {
-					image = new Image("/resources/" + _selectedProfile.get_imagePath());
-				} catch (IllegalArgumentException ex) {
-					image = new Image("/resources/noimagefound.jpg");
-				}
-				ImageView iv = new ImageView(image);
-
+				ImageView iv = CreateImageView(_selectedProfile.get_imagePath());
+				
 				ObservableList<Profile> listoffriends = FXCollections
 						.<Profile>observableArrayList(_selectedProfile.getfriendlist());
 
 				ListView<Profile> _friendlist = new ListView<>(listoffriends);
 				_friendlist.setOrientation(Orientation.VERTICAL);
-				_friendlist.setPrefSize(300, 200);
+				_friendlist.setPrefSize(150, 100);
 				_friendlist.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Profile>() {
 					public void changed(ObservableValue<? extends Profile> ov, final Profile oldvalue,
 							final Profile newvalue) {
@@ -254,19 +254,36 @@ public class Gui extends Application {
 				});
 
 				DisplayPopupGrid.add(nameLabel, 1, 1, 2, 2);
-				DisplayPopupGrid.add(nameText, 3, 1, 2, 2);
-				DisplayPopupGrid.add(ageLabel, 1, 3, 2, 2);
-				DisplayPopupGrid.add(ageText, 3, 3, 2, 2);
-				DisplayPopupGrid.add(statusLabel, 1, 5, 2, 2);
-				DisplayPopupGrid.add(statusText, 3, 5, 2, 2);
-				DisplayPopupGrid.add(_friendlist, 1, 8, 2, 2);
-				DisplayPopupGrid.add(iv, 1, 11, 2, 2);
+				DisplayPopupGrid.add(nameText, 5, 1, 2, 2);
+				DisplayPopupGrid.add(ageLabel, 1, 5, 2, 2);
+				DisplayPopupGrid.add(ageText, 5, 5, 2, 2);
+				DisplayPopupGrid.add(statusLabel, 1, 8, 2, 2);
+				DisplayPopupGrid.add(statusText, 5, 8, 2, 2);
+				DisplayPopupGrid.add(_friendlist, 200, 10, 50, 60);
+				DisplayPopupGrid.add(iv, 2, 10, 50, 60);
 
 				Scene DisplayScene = new Scene(DisplayPopupGrid, 600, 400);
 				DisplayStage.setScene(DisplayScene);
 				DisplayStage.show();
 			}
 		});
+	}
+	
+	private ImageView CreateImageView(String imagePath) {
+		Image image = null;
+		try {
+			image = new Image("/resources/" + imagePath);
+		} catch (IllegalArgumentException ex) {
+			image = new Image("/resources/noimagefound.jpg", 100, 100, false, false);
+
+		}
+
+		ImageView iv = new ImageView(image);
+		iv.setFitHeight(250);
+		iv.setFitWidth(300);
+		iv.setPreserveRatio(true);
+		
+		return iv;
 	}
 
 	private void setCompareButtonAction(Stage primaryStage, ObservableList<Profile> selectedProfiles) {
@@ -321,7 +338,14 @@ public class Gui extends Application {
 
 				compareGrid.add(relationshipTypeLabel, 1, 12, 2, 2);
 				compareGrid.add(relationshipTypeText, 3, 12, 2, 2);
-
+				
+				ImageView iv1 = CreateImageView(firstProfile.get_imagePath());
+				ImageView iv2 = CreateImageView(secondProfile.get_imagePath());
+				
+				compareGrid.add(iv1, 1, 15, 50, 60);
+				compareGrid.add(iv2, 10, 15, 50, 60);
+				
+				
 				Scene DisplayScene = new Scene(compareGrid, 600, 400);
 				DisplayStage.setScene(DisplayScene);
 				DisplayStage.show();
