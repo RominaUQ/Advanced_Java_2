@@ -60,11 +60,13 @@ public class Gui extends Application {
 		root.add(_btnCompare, 1, 18, 5, 3);
 		root.add(_btnRelate, 1, 23, 5, 3);
 		root.setAlignment(Pos.TOP_LEFT);
+		
 		_btnDisplay.setMinWidth(100);
 		_btnDelete.setMinWidth(100);
 		_btnAdd.setMinWidth(100);
 		_btnCompare.setMinWidth(100);
-
+		_btnRelate.setMinWidth(100);
+		
 		_names.addAll(_driver.getAllProfiles());
 
 		ListView<Profile> lstNames = new ListView<>(_names);
@@ -86,7 +88,7 @@ public class Gui extends Application {
 			}
 		});
 
-		root.add(lstNames, 11, 3, 9, 20);
+		root.add(lstNames, 11, 3, 15, 28);
 
 		root.setHgap(10);
 		root.setVgap(10);
@@ -158,18 +160,11 @@ public class Gui extends Application {
 				addPopupGrid.setHgap(10);
 				addPopupGrid.setVgap(10);
 
-				Scene dialogScene = new Scene(addPopupGrid, 600, 400);
+				Scene dialogScene = new Scene(addPopupGrid, 300, 200);
 				dialogStage.setScene(dialogScene);
 				dialogStage.show();
 			}
 		});
-	}
-
-	private void ChangeButtonStatus(int numberOfProfilesSelected) {
-		_btnDelete.setDisable(numberOfProfilesSelected > 1);
-		_btnDisplay.setDisable(numberOfProfilesSelected > 1);
-		_btnCompare.setDisable(numberOfProfilesSelected < 2);
-		_btnRelate.setDisable(numberOfProfilesSelected < 2);
 	}
 
 	private void setAddButtonAction(Stage primaryStage) {
@@ -390,6 +385,13 @@ public class Gui extends Application {
 				}
 			}
 		});
+	}
+	
+	private void ChangeButtonStatus(int numberOfProfilesSelected) {
+		_btnDelete.setDisable(numberOfProfilesSelected > 1);
+		_btnDisplay.setDisable(numberOfProfilesSelected > 1);
+		_btnCompare.setDisable(numberOfProfilesSelected < 2);
+		_btnRelate.setDisable(numberOfProfilesSelected < 2);
 	}
 
 	private ImageView CreateImageView(String imagePath) {

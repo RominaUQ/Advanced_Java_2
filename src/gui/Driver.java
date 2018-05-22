@@ -95,6 +95,10 @@ public class Driver {
 
 	public Boolean createProfile(String name, String status, String sex, int age, String state, String mumName,
 			String dadName) throws Exception {
+		if (age < 0 || age > 150) {
+			throw new NoSuchAgeException("Trying to enter a person whose age is negative or over 150");
+		}
+
 		Profile profile = null;
 		if (searchProfile(name) == null) {
 			if (age > 16) {
@@ -333,9 +337,57 @@ public class Driver {
 	}
 
 	public Boolean createRelationship(String name1, String name2, String relationType) {
+		try {
+			validateRelationship(name1, name2, relationType);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}
 		CreateQueries.addRelation(name1, name2, relationType);
 		CreateQueries.addRelation(name2, name1, relationType);
 		return true;
 	}
 
+	private void validateRelationship(String name1, String name2, String relationType) throws Exception {
+		Profile profile1 = searchProfile(name1);
+		Profile profile2 = searchProfile(name2);
+
+		if (relationType.equals("Friend")) {
+			if (profile1 instanceof YoungChild || profile2 instanceof YoungChild) {
+				throw new TooYoungException("Trying to make friends with a young child");
+			}
+
+			if (profile1 instanceof Child || profile2 instanceof Child) {
+				if (profile1 instanceof Adult || profile2 instanceof Adult) {
+					throw new NotToBeFriendsException("Trying to make an adult and a child friends");
+				}
+				if (Math.abs(profile1.getage() - profile2.getage()) > 3) {
+					throw new NotToBeFriendsException("Can't friend two children with an age gap larger than 3");
+				}
+			}
+		}
+
+		if (relationType.equals("Couple")) {
+			if (!(profile1 instanceof Adult) || !(profile2 instanceof Adult)) {
+				throw new NotToBeCoupledException("Trying to make a couple when at least one member is not an adult");
+			}
+
+			if (((Adult) profile1).getSpouse() != null || ((Adult) profile2).getSpouse() != null) {
+				throw new NoAvailableException(
+						"Trying to make two adults a couple and at least one of them is already connected with another adult as a couple");
+			}
+		}
+
+		if (relationType.equals("Colleague")) {
+			if (!(profile1 instanceof Adult) || !(profile2 instanceof Adult)) {
+				throw new NotToBeColleaguesException("Trying to connect a child in a colleague relation");
+			}
+		}
+
+		if (relationType.equals("Classmate")) {
+			if (profile1 instanceof YoungChild || profile2 instanceof YoungChild) {
+				throw new NotToBeClassmatesException("Trying to connect a young child in a classmate relation");
+			}
+		}
+	}
 }
