@@ -12,7 +12,7 @@ import java.io.BufferedReader;
 public class MiniNet {
 	public static void main(String[] args) {
 		Boolean showMenu = true;
-		Driver driver = new Driver(new DataReader());
+		Driver driver = new Driver();
 
 		while (showMenu) {
 			try {
@@ -132,7 +132,7 @@ public class MiniNet {
 				if (profile != null) {
 					System.out.println(" ");
 					System.out.println(profile.toString());
-					friendlist = driver.Diplayfriendlist(name);
+					friendlist = driver.Displayfriendlist(name);
 
 					if (!friendlist.equals("")) {
 						System.out.println(friendlist);
@@ -190,7 +190,7 @@ public class MiniNet {
 						success = driver.AddFriend(profile, profile2);
 
 						if (success) {
-							friendlist = driver.Diplayfriendlist(name1);
+							friendlist = driver.Displayfriendlist(name1);
 							System.out.println(
 									profile.getname() + " and " + profile2.getname() + " are friends now, congratz!");
 						}

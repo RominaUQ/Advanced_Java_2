@@ -9,19 +9,14 @@ import java.util.ArrayList;
 import exceptions.NotToBeCoupledException;
 
 public class DataReader {
-
 	private BufferedReader breader;
 	private ArrayList<Profile> profiles;
-	private String relation;
-	private Object name;
-	private String name2;
 
 	public void setBreader(BufferedReader breader) {
 		this.breader = breader;
 	}
 
 	public ArrayList<Profile> loadAdults() {
-
 		try {
 			setBreader(new BufferedReader(new FileReader("data/people.txt")));
 		} catch (FileNotFoundException e) {
@@ -401,9 +396,7 @@ public class DataReader {
 
 	}
 
-	public void SetClassmates() throws Exception {// array of classmates needs
-													// to be added
-
+	public void SetClassmates() throws Exception {
 		try {
 			setBreader(new BufferedReader(new FileReader("data/relations.txt")));
 		} catch (FileNotFoundException e) {
@@ -441,19 +434,4 @@ public class DataReader {
 		}
 
 	}
-
-	public String getrelationship(Profile profile1, Profile profile2) {
-		String relationship = "";
-
-		if (this.name.equals(profile1.getname()) && this.name2.equals(profile2.getname())) {
-			relationship = relation;
-		}
-		return relationship;
-	}
-
-	/*
-	 * Set<relationship> relationship = new HashSet<relationship>(); private
-	 * String _name; private String _name2; private String _relation;
-	 */
-
 }

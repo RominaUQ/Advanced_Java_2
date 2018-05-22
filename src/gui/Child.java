@@ -37,14 +37,7 @@ public class Child extends Profile {
 			return true;
 		}
 
-		// if (profile.getage() <= 2 && this.getage() <= 2) {
-		// System.out.println("Younger than two year old, can not have any
-		// friend");
-		// return false;
-		// }
-
 		/// to maintain the age difference condition
-
 		int agediff = Math.abs(this.getage() - profile.getage());
 		if (profile.getage() < 16 && agediff < 3) {
 			_friendlist.add(profile);
@@ -64,37 +57,11 @@ public class Child extends Profile {
 		return parents;
 	}
 
-	public String getMumname() {
-		return _parent1.getname();
-
-	}
-
-	public String getDadname() {
-		return _parent2.getname();
-
-	}
-
 	public void setDad(Adult _parent1) {
 		this._parent1 = _parent1;
 	}
 
 	public void setMum(Adult _parent2) {
 		this._parent2 = _parent2;
-	}
-
-	public void setclassmate(Set<Child> classmate) {
-		_classmate = classmate;
-	}
-
-	public void addClassmate(Child Child) {
-		if (this.getstatus() == Child.getstatus() && !this._classmate.contains(Child)) {
-			_classmate.add(Child);
-			Child.addClassmate(this);
-		}
-	}
-
-	public Set<Child> getclassmate() {
-		return _classmate;
-
 	}
 }

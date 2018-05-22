@@ -1,13 +1,14 @@
 package SQL;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- * @author Savran Aleksei
- *This class creates the table with the following arguments: id, name, image, status, sex, age, state. 
- *It's used just for creating a table and not used anywhere in the app.
+ * @author Savran Aleksei This class creates the table with the following
+ *         arguments: id, name, image, status, sex, age, state. It's used just
+ *         for creating a table and not used anywhere in the app.
  */
 public class TableClass {
 	public static void createTable() {
@@ -24,17 +25,18 @@ public class TableClass {
 			Statement stmn2 = con.createStatement();
 			stmn2.executeQuery(sql2);
 		} catch (SQLException e) {
-			System.out.println(e.getMessage()); 
+			System.out.println(e.getMessage());
 		} finally {
 			if (con != null) {
 				try {
 					con.close();
 				} catch (SQLException e2) {
-					System.out.println(e2.getMessage()); 
+					System.out.println(e2.getMessage());
 				}
 			}
 		}
 	}
+
 	public static void main(String[] args) {
 		createTable();
 	}

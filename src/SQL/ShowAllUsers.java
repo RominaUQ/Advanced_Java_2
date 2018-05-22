@@ -31,13 +31,12 @@ public class ShowAllUsers {
 				if (age > 16) {
 					profiles.add(new Adult(rs.getString(2), rs.getString(2) + ".jpg", rs.getString(4), rs.getString(5),
 							rs.getInt(6), rs.getString(7)));
-				}else if (age > 2) {
+				} else if (age > 2) {
 					profiles.add(new Child(rs.getString(2), rs.getString(2) + ".jpg", rs.getString(4), rs.getString(5),
 							rs.getInt(6), rs.getString(7), null, null));
-				}
-				else {
-					profiles.add(new YoungChild(rs.getString(2), rs.getString(2) + ".jpg", rs.getString(4), rs.getString(5),
-							rs.getInt(6), rs.getString(7), null, null));
+				} else {
+					profiles.add(new YoungChild(rs.getString(2), rs.getString(2) + ".jpg", rs.getString(4),
+							rs.getString(5), rs.getInt(6), rs.getString(7), null, null));
 				}
 			}
 
@@ -54,9 +53,4 @@ public class ShowAllUsers {
 		}
 		return profiles;
 	}
-
-	public static void main(String[] args) throws ClassNotFoundException {
-		userShowAll();
-	}
-
 }

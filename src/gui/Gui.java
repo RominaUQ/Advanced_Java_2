@@ -36,7 +36,7 @@ public class Gui extends Application {
 	private Button _btnRelate;
 
 	public Gui() {
-		_driver = new Driver(new DataReader());
+		_driver = new Driver();
 		_btnDisplay = new Button("Display");
 		_btnDelete = new Button("Delete");
 		_btnAdd = new Button("Add");
@@ -237,7 +237,7 @@ public class Gui extends Application {
 						}
 						if (success) {
 							_names.clear();
-							_names.addAll(ShowAllUsers.userShowAll());
+							_names.addAll(_driver.getAllProfiles());
 							dialogStage.close();
 						}
 					}

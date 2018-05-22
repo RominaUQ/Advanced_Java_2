@@ -33,29 +33,12 @@ public abstract class Profile {
 		return _imagePath;
 	}
 
-	public void set_imagePath(String _imagePath) {
-		this._imagePath = _imagePath;
-	}
-
 	public String get_sex() {
 		return _sex;
 	}
 
-	public void set_sex(String _sex) {
-		this._sex = _sex;
-	}
-
 	public String get_state() {
 		return _state;
-	}
-
-	public void set_state(String _state) {
-		this._state = _state;
-	}
-
-	/// this is to represent Adult profiles (overloading)
-	public Profile(String name) {
-		this._name = name;
 	}
 
 	public void setFriendlist(Set<Profile> friendlist) {

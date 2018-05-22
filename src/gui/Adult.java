@@ -8,15 +8,10 @@ public class Adult extends Profile {
 
 	Adult Spouse;
 	Set<Adult> _colleague = new HashSet<>();
-
-//	public Adult(String name, String status, int age) {
-//		super(name, status, age);
-//	}
 	
 	public Adult(String name, String imagePath, String status, String sex, Integer age, String state) {
 		super(name, imagePath, status, sex, age, state);
 	}
-
 
 	protected Set<Child> _dependents = new HashSet<>();
 
@@ -74,6 +69,4 @@ public class Adult extends Profile {
 			adult.addColleague(this);
 		}
 	}
-
 }
-
