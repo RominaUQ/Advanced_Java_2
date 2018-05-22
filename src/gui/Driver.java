@@ -332,4 +332,10 @@ public class Driver {
 		return friendlist;
 	}
 
+	public Boolean createRelationship(String name1, String name2, String relationType) {
+		CreateQueries.addRelation(name1, name2, relationType);
+		CreateQueries.addRelation(name2, name1, relationType);
+		return true;
+	}
+
 }

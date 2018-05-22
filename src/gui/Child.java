@@ -11,7 +11,6 @@ import java.util.Set;
 public class Child extends Profile {
 	Adult _parent1;
 	Adult _parent2;
-	// int age;
 	Set<Child> _classmate = new HashSet<>();
 
 	public Child(String name, String imagePath, String status, String sex, Integer age, String state, Adult MumParent,

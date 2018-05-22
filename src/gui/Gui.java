@@ -20,6 +20,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
@@ -32,6 +33,7 @@ public class Gui extends Application {
 	private Button _btnDelete;
 	private Button _btnAdd;
 	private Button _btnCompare;
+	private Button _btnRelate;
 
 	public Gui() {
 		_driver = new Driver(new DataReader());
@@ -39,8 +41,13 @@ public class Gui extends Application {
 		_btnDelete = new Button("Delete");
 		_btnAdd = new Button("Add");
 		_btnCompare = new Button("Compare");
+		_btnRelate = new Button("Relate");
 
 		_names = FXCollections.<Profile>observableArrayList();
+	}
+
+	public static void main(String[] args) {
+		Application.launch(args);
 	}
 
 	@Override // Override the start method from the superclass
@@ -51,22 +58,15 @@ public class Gui extends Application {
 		root.add(_btnDelete, 1, 8, 5, 3);
 		root.add(_btnAdd, 1, 13, 5, 3);
 		root.add(_btnCompare, 1, 18, 5, 3);
+		root.add(_btnRelate, 1, 23, 5, 3);
 		root.setAlignment(Pos.TOP_LEFT);
 		_btnDisplay.setMinWidth(100);
 		_btnDelete.setMinWidth(100);
 		_btnAdd.setMinWidth(100);
 		_btnCompare.setMinWidth(100);
 
-		Label searchLabel = new Label("Search a Profile");
-		TextField searchText = new TextField();
-		Button btnSearch = new Button("Search");
-		root.add(searchLabel, 11, 2, 1, 1);
-		root.add(searchText, 12, 1, 5, 3);
-		root.add(btnSearch, 17, 1, 2, 3);
-		_btnCompare.setMinWidth(100);
-
 		_names.addAll(_driver.getAllProfiles());
-		
+
 		ListView<Profile> lstNames = new ListView<>(_names);
 		lstNames.setOrientation(Orientation.VERTICAL);
 		lstNames.setPrefSize(300, 350);
@@ -95,6 +95,7 @@ public class Gui extends Application {
 		setDeleteButtonAction();
 		setDisplayButtonAction(primaryStage);
 		setCompareButtonAction(primaryStage, lstNames.getSelectionModel().getSelectedItems());
+		setRelateButtonAction(primaryStage, lstNames.getSelectionModel().getSelectedItems());
 
 		root.setPadding(new Insets(30));
 		Scene scene = new Scene(root, 800, 600);
@@ -103,10 +104,72 @@ public class Gui extends Application {
 		primaryStage.show();
 	}
 
+	private void setRelateButtonAction(Stage primaryStage, ObservableList<Profile> selectedProfiles) {
+		_btnRelate.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				final Stage dialogStage = new Stage();
+				dialogStage.initModality(Modality.APPLICATION_MODAL);
+				dialogStage.initOwner(primaryStage);
+				dialogStage.setTitle("Create a new relationship");
+
+				GridPane addPopupGrid = new GridPane();
+				Label relationLabel = new Label("Type");
+				final ChoiceBox<String> relationTypes = new ChoiceBox<String>();
+				relationTypes.getItems().add("Friend");
+				relationTypes.getItems().add("Couple");
+				relationTypes.getItems().add("Colleague");
+				relationTypes.getItems().add("Classmate");
+
+				addPopupGrid.add(relationLabel, 1, 1, 2, 2);
+				addPopupGrid.add(relationTypes, 3, 1, 2, 2);
+
+				Button btnCreate = new Button("Create");
+				Button btnCancel = new Button("Cancel");
+
+				addPopupGrid.add(btnCreate, 1, 5, 2, 2);
+				addPopupGrid.add(btnCancel, 3, 5, 2, 2);
+
+				btnCancel.setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent event) {
+						dialogStage.close();
+					}
+				});
+
+				btnCreate.setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent event) {
+						Boolean success = false;
+						try {
+							success = _driver.createRelationship(selectedProfiles.get(0).getname(),
+									selectedProfiles.get(1).getname(), relationTypes.getSelectionModel().getSelectedItem());
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						if (success) {
+							dialogStage.close();
+						}
+					}
+				});
+
+				addPopupGrid.setAlignment(Pos.TOP_LEFT);
+
+				addPopupGrid.setHgap(10);
+				addPopupGrid.setVgap(10);
+
+				Scene dialogScene = new Scene(addPopupGrid, 600, 400);
+				dialogStage.setScene(dialogScene);
+				dialogStage.show();
+			}
+		});
+	}
+
 	private void ChangeButtonStatus(int numberOfProfilesSelected) {
 		_btnDelete.setDisable(numberOfProfilesSelected > 1);
 		_btnDisplay.setDisable(numberOfProfilesSelected > 1);
 		_btnCompare.setDisable(numberOfProfilesSelected < 2);
+		_btnRelate.setDisable(numberOfProfilesSelected < 2);
 	}
 
 	private void setAddButtonAction(Stage primaryStage) {
@@ -172,7 +235,8 @@ public class Gui extends Application {
 						Boolean success = false;
 						try {
 							int age = Integer.parseInt(ageText.getText());
-							success = _driver.createProfile(nameText.getText(), statusText.getText(), sexText.getText(), age, stateText.getText(), momNameText.getText(), dadNameText.getText());
+							success = _driver.createProfile(nameText.getText(), statusText.getText(), sexText.getText(),
+									age, stateText.getText(), momNameText.getText(), dadNameText.getText());
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -215,17 +279,17 @@ public class Gui extends Application {
 				Label statusText = new Label(_selectedProfile.getstatus());
 
 				ImageView iv = CreateImageView(_selectedProfile.get_imagePath());
-				
-				ObservableList<Profile> listoffriends = FXCollections
-						.<Profile>observableArrayList(_selectedProfile.getfriendlist());
 
-				ListView<Profile> _friendlist = new ListView<>(listoffriends);
+				ObservableList<Relation> listOfFriends = FXCollections
+						.<Relation>observableArrayList(_selectedProfile.getRelations());
+
+				ListView<Relation> _friendlist = new ListView<>(listOfFriends);
 				_friendlist.setOrientation(Orientation.VERTICAL);
 				_friendlist.setPrefSize(150, 100);
-				_friendlist.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Profile>() {
-					public void changed(ObservableValue<? extends Profile> ov, final Profile oldvalue,
-							final Profile newvalue) {
-						_selectedProfile = newvalue;
+				_friendlist.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Relation>() {
+					public void changed(ObservableValue<? extends Relation> ov, final Relation oldvalue,
+							final Relation newvalue) {
+						// _selectedProfile = newvalue;
 					}
 				});
 
@@ -243,23 +307,6 @@ public class Gui extends Application {
 				DisplayStage.show();
 			}
 		});
-	}
-	
-	private ImageView CreateImageView(String imagePath) {
-		Image image = null;
-		try {
-			image = new Image("/resources/" + imagePath);
-		} catch (IllegalArgumentException ex) {
-			image = new Image("/resources/noimagefound.jpg", 100, 100, false, false);
-
-		}
-
-		ImageView iv = new ImageView(image);
-		iv.setFitHeight(250);
-		iv.setFitWidth(300);
-		iv.setPreserveRatio(true);
-		
-		return iv;
 	}
 
 	private void setCompareButtonAction(Stage primaryStage, ObservableList<Profile> selectedProfiles) {
@@ -314,14 +361,13 @@ public class Gui extends Application {
 
 				compareGrid.add(relationshipTypeLabel, 1, 12, 2, 2);
 				compareGrid.add(relationshipTypeText, 3, 12, 2, 2);
-				
+
 				ImageView iv1 = CreateImageView(firstProfile.get_imagePath());
 				ImageView iv2 = CreateImageView(secondProfile.get_imagePath());
-				
+
 				compareGrid.add(iv1, 1, 15, 50, 60);
 				compareGrid.add(iv2, 10, 15, 50, 60);
-				
-				
+
 				Scene DisplayScene = new Scene(compareGrid, 600, 400);
 				DisplayStage.setScene(DisplayScene);
 				DisplayStage.show();
@@ -346,7 +392,20 @@ public class Gui extends Application {
 		});
 	}
 
-	public static void main(String[] args) {
-		Application.launch(args);
+	private ImageView CreateImageView(String imagePath) {
+		Image image = null;
+		try {
+			image = new Image("/resources/" + imagePath);
+		} catch (IllegalArgumentException ex) {
+			image = new Image("/resources/noimagefound.jpg", 100, 100, false, false);
+
+		}
+
+		ImageView iv = new ImageView(image);
+		iv.setFitHeight(250);
+		iv.setFitWidth(300);
+		iv.setPreserveRatio(true);
+
+		return iv;
 	}
 }

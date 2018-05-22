@@ -15,14 +15,15 @@ import java.sql.SQLException;
 public class CreateQueries {
 	private static FileInputStream fis;
 
-	public static void createNewUser(String name, String status, String sex, int age, String state)
-			throws ClassNotFoundException {
-		Class.forName("org.sqlite.JDBC");
-		String url = "jdbc:sqlite:MiniDB.db";
+	public static void createNewUser(String name, String status, String sex, int age, String state) {
 		Connection con = null;
 		try {
+			Class.forName("org.sqlite.JDBC");
+			String url = "jdbc:sqlite:MiniDB.db";
 			con = DriverManager.getConnection(url);
+
 			String sql = "insert into Profiles (name, image, status, sex, age, state) values (?,?,?,?,?,?);";
+			
 			PreparedStatement pstmn = con.prepareStatement(sql);
 			pstmn.setString(1, name);
 			pstmn.setBytes(2, readFile("src/resources/noimagefound.jpg"));
@@ -31,33 +32,6 @@ public class CreateQueries {
 			pstmn.setInt(5, age);
 			pstmn.setString(6, state);
 
-			pstmn.execute();
-			con.commit();
-
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-		} finally {
-			if (con != null) {
-				try {
-					con.close();
-				} catch (SQLException e2) {
-					System.out.println(e2.getMessage());
-				}
-			}
-		}
-	}
-
-	public static void addFriend(String name, String name2, String relation) throws ClassNotFoundException {
-		Class.forName("org.sqlite.JDBC");
-		String url = "jdbc:sqlite:MiniDB.db";
-		Connection con = null;
-		try {
-			con = DriverManager.getConnection(url);
-			String sql = "insert into relations (profile1, profile2, relation) values (?,?,?);";
-			PreparedStatement pstmn = con.prepareStatement(sql);
-			pstmn.setString(1, name);
-			pstmn.setString(2, name2);
-			pstmn.setString(3, relation);
 			pstmn.execute();
 			con.commit();
 
@@ -74,34 +48,35 @@ public class CreateQueries {
 		}
 	}
 
-	// public static void addColleagues(String name, String name2) throws
-	// ClassNotFoundException {
-	// Class.forName("org.sqlite.JDBC");
-	// String url = "jdbc:sqlite:MiniDB.db";
-	// Connection con = null;
-	// try {
-	// con = DriverManager.getConnection(url);
-	// String sql = "update relations set id = ?, colleagues = ?;";
-	// PreparedStatement pstmn = con.prepareStatement(sql);
-	// int prID = SearchQueries.getUserID(name);
-	//
-	// pstmn.setInt(1, prID);
-	// pstmn.setString(2, name2);
-	// pstmn.execute();
-	// con.commit();
-	//
-	// } catch (SQLException e) {
-	// System.out.println(e.getMessage());
-	// } finally {
-	// if (con != null) {
-	// try {
-	// con.close();
-	// } catch (SQLException e2) {
-	// System.out.println(e2.getMessage());
-	// }
-	// }
-	// }
-	// }
+	public static Boolean addRelation(String name, String relationName, String relation) {
+		Connection con = null;
+		try {
+			Class.forName("org.sqlite.JDBC");
+			String url = "jdbc:sqlite:MiniDB.db";
+
+			con = DriverManager.getConnection(url);
+			String sql = "insert into relations (profile1, profile2, relation) values (?,?,?);";
+			PreparedStatement pstmn = con.prepareStatement(sql);
+			pstmn.setString(1, name);
+			pstmn.setString(2, relationName);
+			pstmn.setString(3, relation);
+			pstmn.execute();
+			con.commit();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return false;
+		} finally {
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException e2) {
+					System.out.println(e2.getMessage());
+				}
+			}
+		}
+		return true;
+	}
 
 	private static byte[] readFile(String file) {
 		ByteArrayOutputStream baos = null;

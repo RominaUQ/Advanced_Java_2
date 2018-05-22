@@ -6,6 +6,8 @@ package gui;
 import java.util.HashSet;
 import java.util.Set;
 
+import SQL.SearchQueries;
+
 ///Profile class represent the profile of all adults and superclass for other profile types such as dependents
 public abstract class Profile {
 	protected String _name;
@@ -14,10 +16,10 @@ public abstract class Profile {
 	protected String _state;
 	protected String _status;
 	protected int _age;
-	
+
 	protected Set<Profile> _friendlist = new HashSet<>();
 
-	public Profile(String name, String imagePath, String status, String sex, int age, String state ) {
+	public Profile(String name, String imagePath, String status, String sex, int age, String state) {
 		this._name = name;
 		this._status = status;
 		this._age = age;
@@ -81,6 +83,10 @@ public abstract class Profile {
 		return _friendlist;
 	}
 
+	public Set<Relation> getRelations() {
+		return SearchQueries.getRelationsForUser(_name);
+	}
+
 	/// add friend method, and to avoid child and adult connecting
 	public abstract Boolean addfriend(Profile profile, Boolean isRelative) throws Exception;
 
@@ -107,57 +113,28 @@ public abstract class Profile {
 		profileString += _sex + " ";
 		profileString += _age + " - ";
 		profileString += _state + " ";
-		
+
 		return profileString;
 	}
-	
 
 	public String getRelationship(Profile secondProfile) {
-		boolean isRelative = getRelatives().contains(secondProfile);
-		if (isRelative) {
-			if (secondProfile instanceof Adult) {
-				if (!(this instanceof Adult)) {
-					return this.getname() + " is child of " + secondProfile.getname();
-				}
-				if (((Adult) secondProfile).getSpouse().getname().equals(this.getname())) {
-					return this.getname() + " is married to " + secondProfile.getname();
-				}
-			}
-			if (!(secondProfile instanceof Adult) && this.getRelatives().contains(secondProfile)) {
-				return this.getname() + " is parent of " + secondProfile.getname();
+		Set<Relation> relations = SearchQueries.getRelationsForUser(this.getname());
+
+		for (Relation relation : relations) {
+			if (relation.getName().equals(secondProfile.getname())) {
+				return relation.getRelationType();
 			}
 		}
 
-//		if (secondProfile.getstatus().equals(this.getstatus())) {
-//			return (secondProfile instanceof Adult) ? "Colleagues" : "Classmates";
-//		}
-
-		String thirdLevelText = "";
-		boolean isInFriendList = _friendlist.contains(secondProfile);
-		if (isInFriendList) {
-			return "Friends";
-		} else {
-			// If the profile is not in the friends list we search for 2nd and 3rd level connections.
-			// If we find a 2nd level we return immediately, if a 3rd level is found we save it for later
-			for (Profile friend : _friendlist) {
-				Set<Profile> friendsOfFriend = friend.getfriendlist();
-				for (Profile friendOfFriend : friendsOfFriend) {
-					if (friendOfFriend.equals(secondProfile)) {
-						return "2nd level connection (" + this.getname() + " - " + friend.getname() + " - "
-								+ secondProfile.getname() + ")";
-					} else {
-						if (friendOfFriend.getfriendlist().contains(secondProfile)) {
-							thirdLevelText = "3rd level connection (" + this.getname() + " - " + friend.getname()
-									+ " - " + friendOfFriend.getname() + " - " + secondProfile.getname() + ")";
-						}
-					}
+		for (Relation relation : relations) {
+			Set<Relation> friendsRelations = SearchQueries.getRelationsForUser(relation.getName());
+			for (Relation friendsRelation : friendsRelations) {
+				if (friendsRelation.getName().equals(this.getname())) {
+					return "Friend of Friend";
 				}
 			}
-
-			if (thirdLevelText != "") {
-				return thirdLevelText;
-			}
 		}
+
 		return "Not connected";
 	}
 }
